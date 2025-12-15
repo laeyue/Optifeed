@@ -21,7 +21,6 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     restart: unless-stopped
-    env_file: .env
     environment:
       PORT: 3000
       DB_HOST: db
