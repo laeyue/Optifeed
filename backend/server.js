@@ -23,6 +23,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev')); // Request logging
 
 // Serve static files from parent directory
+// Ensure config.js is never cached so frontend picks up latest API base URL
+app.use((req, res, next) => {
+    if (req.path.endsWith('config.js')) {
+        res.set('Cache-Control', 'no-store, must-revalidate');
+    }
+    next();
+});
 app.use(express.static(path.join(__dirname, '..')));
 
 // Rate limiting
