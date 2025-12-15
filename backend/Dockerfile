@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install production dependencies first (better layer caching)
 COPY backend/package*.json ./backend/
-RUN cd backend && npm ci --omit=dev
+RUN cd backend && npm install --omit=dev
 
 # Copy backend sources
 COPY backend ./backend
