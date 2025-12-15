@@ -1,0 +1,2501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Monitoring - Admin</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/monitoring.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+    <style>
+        /* Enhanced Page Header */
+        .page-header {
+            background: linear-gradient(135deg, rgba(47, 167, 110, 0.08) 0%, rgba(78, 205, 196, 0.05) 100%);
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            border: 1.5px solid rgba(47, 167, 110, 0.12);
+            box-shadow: 0 4px 20px rgba(47, 167, 110, 0.08);
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .page-header .page-icon {
+            width: 32px;
+            height: 32px;
+            color: #2FA76E;
+        }
+        .header-subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            margin: 0.5rem 0 0 0;
+            font-weight: 500;
+        }
+        
+        /* Enhanced Operators Grid */
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .operator-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        .operator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 50%, #2FA76E 100%);
+            background-size: 200% 100%;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .operator-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(47, 167, 110, 0.2), 0 6px 20px rgba(47, 167, 110, 0.15);
+            border-color: #2FA76E;
+        }
+        .operator-card:hover::before {
+            transform: scaleX(1);
+        }
+        .operator-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .operator-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(47, 167, 110, 0.35), 0 4px 12px rgba(47, 167, 110, 0.25);
+            flex-shrink: 0;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .operator-card:hover .operator-avatar {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .operator-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .operator-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #1e293b;
+            font-weight: 700;
+            margin-bottom: 0.375rem;
+            letter-spacing: -0.02em;
+        }
+        .operator-info p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+        .operator-status-badge {
+            margin-left: auto;
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .operator-status-badge.online {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .operator-status-badge.offline {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .operator-status-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+        .operator-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(47, 167, 110, 0.06) 0%, rgba(78, 205, 196, 0.03) 100%);
+            border-radius: 1rem;
+            border: 1.5px solid rgba(47, 167, 110, 0.12);
+            box-shadow: inset 0 2px 8px rgba(47, 167, 110, 0.05);
+        }
+        .operator-stat-item {
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            transition: background 0.2s ease;
+        }
+        .operator-stat-item:hover {
+            background: rgba(47, 167, 110, 0.08);
+        }
+        .operator-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.375rem;
+            line-height: 1.2;
+        }
+        .operator-stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .operator-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(226, 232, 240, 0.8);
+        }
+        .operator-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            font-size: 0.9375rem;
+            color: #64748b;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+            background: rgba(248, 250, 252, 0.5);
+        }
+        .operator-detail-item:hover {
+            background: rgba(47, 167, 110, 0.08);
+            transform: translateX(4px);
+        }
+        .operator-detail-item svg {
+            width: 20px;
+            height: 20px;
+            color: #2FA76E;
+            flex-shrink: 0;
+        }
+        .operator-detail-item strong {
+            color: #1e293b;
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+            color: var(--text-primary);
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9);
+            position: relative;
+            overflow: hidden;
+        }
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(47, 167, 110, 0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        .back-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(47, 167, 110, 0.05), rgba(78, 205, 196, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .back-button:hover::before {
+            left: 100%;
+        }
+        .back-button:hover::after {
+            opacity: 1;
+        }
+        .back-button:hover {
+            background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+            border-color: #2FA76E;
+            color: white;
+            transform: translateX(-8px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(47, 167, 110, 0.35), 0 6px 16px rgba(47, 167, 110, 0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .back-button:active {
+            transform: translateX(-4px) scale(0.99);
+        }
+        .back-button svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+        .back-button:hover svg {
+            transform: translateX(-5px) rotate(-8deg);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .sensor-item {
+            animation: fadeInUp 0.3s ease both;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .shutdown-all-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9375rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        .shutdown-all-button:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        .shutdown-all-button:active {
+            transform: translateY(0);
+        }
+        .shutdown-all-button svg {
+            width: 20px;
+            height: 20px;
+        }
+        .operator-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e5e7eb;
+        }
+        .operator-control-btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            color: var(--text-primary);
+        }
+        .operator-control-btn.system-on {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #10b981;
+            color: white;
+        }
+        .operator-control-btn.system-off {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-color: #ef4444;
+            color: white;
+        }
+        .operator-control-btn.sensors-on {
+            background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+            border-color: #2FA76E;
+            color: white;
+        }
+        .operator-control-btn.sensors-off {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            border-color: #6b7280;
+            color: white;
+        }
+        .operator-control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .operator-control-btn:active {
+            transform: translateY(0);
+        }
+        .operator-control-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        .operator-detail-view {
+            display: none;
+        }
+        .operator-detail-view.active {
+            display: block;
+        }
+        .operators-list-view {
+            display: block;
+        }
+        .operators-list-view.hidden {
+            display: none;
+        }
+        .no-operators {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+        .no-operators svg {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+        /* Enhanced Monitoring Grid */
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .monitor-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        .monitor-card:hover {
+            box-shadow: 0 8px 32px rgba(47, 167, 110, 0.12);
+            border-color: rgba(47, 167, 110, 0.2);
+            transform: translateY(-2px);
+        }
+        .monitor-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 0.875rem;
+            color: #2FA76E;
+            flex-shrink: 0;
+        }
+        .monitor-card h3 {
+            display: flex;
+            align-items: center;
+            margin: 0 0 2rem 0;
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #1e293b;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(47, 167, 110, 0.1);
+        }
+        /* Enhanced Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+        .chart-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        .chart-card:hover {
+            box-shadow: 0 8px 32px rgba(47, 167, 110, 0.12);
+            border-color: rgba(47, 167, 110, 0.2);
+        }
+        .chart-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 0.875rem;
+            color: #2FA76E;
+            flex-shrink: 0;
+        }
+        .chart-card h2 {
+            display: flex;
+            align-items: center;
+            margin: 0 0 2rem 0;
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #1e293b;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(47, 167, 110, 0.1);
+        }
+        /* Enhanced Metrics */
+        .performance-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .metric {
+            padding: 1rem;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .metric:hover {
+            background: rgba(47, 167, 110, 0.05);
+            transform: translateX(4px);
+        }
+        .metric-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .progress-bar {
+            height: 10px;
+            background: rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 2px 8px rgba(47, 167, 110, 0.3);
+        }
+        .metric-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .metric-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .metric-extra {
+            font-size: 0.8125rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Enhanced Health Indicators */
+        .health-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .health-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .health-item:hover {
+            background: rgba(47, 167, 110, 0.05);
+            transform: translateX(4px);
+        }
+        .health-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .health-label {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .health-detail {
+            font-size: 0.8125rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .health-status {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .health-status.online {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+        .health-status.offline {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Enhanced Sensor List */
+        .sensor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .sensor-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .sensor-item:hover {
+            background: rgba(47, 167, 110, 0.03);
+            border-color: rgba(47, 167, 110, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(47, 167, 110, 0.12);
+        }
+        .sensor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(226, 232, 240, 0.8);
+        }
+        .sensor-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .sensor-id-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            background: rgba(226, 232, 240, 0.5);
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.375rem;
+        }
+        .sensor-status {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .sensor-status.status-online {
+            background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+            color: white;
+            box-shadow: 0 2px 8px rgba(47, 167, 110, 0.3);
+        }
+        .sensor-status.status-offline {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+            box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+        }
+        .sensor-status.status-maintenance {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        }
+        .sensor-status.status-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        .sensor-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .sensor-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 0.875rem;
+            color: #64748b;
+            padding: 0.75rem;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .sensor-detail-item:hover {
+            background: rgba(47, 167, 110, 0.08);
+        }
+        .detail-icon {
+            width: 18px;
+            height: 18px;
+            color: #2FA76E;
+            flex-shrink: 0;
+        }
+        .sensor-detail-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-right: 0.375rem;
+        }
+        .sensor-detail-value {
+            color: #64748b;
+        }
+        .sensor-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(226, 232, 240, 0.8);
+        }
+        .sensor-stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0.75rem;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0.5rem;
+        }
+        .sensor-stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .sensor-stat-value {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        /* Enhanced Events List */
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .event-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0.75rem;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .event-item:hover {
+            background: rgba(47, 167, 110, 0.05);
+            transform: translateX(4px);
+        }
+        .event-item.success {
+            border-left-color: #10b981;
+        }
+        .event-item.warning {
+            border-left-color: #f59e0b;
+        }
+        .event-item.error {
+            border-left-color: #ef4444;
+        }
+        .event-item.info {
+            border-left-color: #3b82f6;
+        }
+        .event-time {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            min-width: 80px;
+        }
+        .event-message {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        
+        /* Enhanced Refresh Button */
+        .btn-refresh {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9375rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(47, 167, 110, 0.3);
+        }
+        .btn-refresh:hover {
+            background: linear-gradient(135deg, #4ECDC4 0%, #2FA76E 100%);
+            transform: translateY(-2px) rotate(180deg);
+            box-shadow: 0 6px 20px rgba(47, 167, 110, 0.4);
+        }
+        .btn-refresh:active {
+            transform: translateY(0) rotate(180deg);
+        }
+        .btn-refresh .refresh-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+        .btn-refresh:hover .refresh-icon {
+            transform: rotate(360deg);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .operators-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .page-header {
+                padding: 1.5rem;
+            }
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="16" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="12" cy="14" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="6" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <path d="M12 4L14 6L18 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+                        <path d="M4 20C4 20 6 18 8 20C10 22 12 20 14 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M10 20C10 20 12 18 14 20C16 22 18 20 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>OptiFeed</h2>
+            </div>
+            <div class="sidebar-account" onclick="event.stopPropagation(); event.preventDefault(); if(typeof openProfileView === 'function') { openProfileView(); } return false;">
+                <div class="account-avatar" id="accountAvatar">A</div>
+                <div class="account-info">
+                    <div class="account-name" id="accountName">Administrator</div>
+                    <div class="account-username" id="accountUsername">@username</div>
+                </div>
+                <div class="account-role" id="accountRole">Administrator</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-dashboard.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-records.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Pellet Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-users.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-monitoring.html" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Operator Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-locations.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Setup Locations</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Operators List View -->
+            <div id="operatorsListView" class="operators-list-view">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="header-content">
+                        <div class="header-title-section">
+                            <h1>
+                                <svg class="page-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Operator Monitoring
+                            </h1>
+                            <p class="header-subtitle">Monitor system performance and sensors for each operator</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <button class="shutdown-all-button" onclick="shutdownAllOperators()" title="Shutdown all operator systems and sensors">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Shutdown All
+                        </button>
+                        <button class="btn-refresh" onclick="loadOperators()">
+                            <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="operatorsGrid" class="operators-grid">
+                    <!-- Operators will be populated here -->
+                </div>
+            </div>
+
+            <!-- Operator Detail View -->
+            <div id="operatorDetailView" class="operator-detail-view">
+                <button class="back-button" onclick="showOperatorsList()">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back to Operators
+                </button>
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="header-content">
+                        <div class="header-title-section">
+                            <h1 id="operatorDetailName">
+                                <svg class="page-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Operator Details
+                            </h1>
+                            <p class="header-subtitle" id="operatorDetailSubtitle">System performance and sensor status</p>
+                        </div>
+                    </div>
+                    <button class="btn-refresh" onclick="refreshOperatorDetails()">
+                        <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+
+                <div class="monitoring-grid">
+                    <div class="monitor-card">
+                        <h3>
+                            <svg class="monitor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="4" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M8 22H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 10L10 13L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            System Performance
+                        </h3>
+                        <div class="performance-metrics">
+                            <div class="metric">
+                                <span class="metric-label">CPU Usage</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="operatorCpuProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-value" id="operatorCpuValue">0%</span>
+                                    <span class="metric-extra" id="operatorCpuTemp">Temp: --°C</span>
+                                </div>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Memory Usage</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="operatorMemoryProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-value" id="operatorMemoryValue">0%</span>
+                                    <span class="metric-extra" id="operatorMemoryUsed">0 GB / 0 GB</span>
+                                </div>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Disk Usage</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="operatorDiskProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-value" id="operatorDiskValue">0%</span>
+                                    <span class="metric-extra" id="operatorDiskFree">Free: -- GB</span>
+                                </div>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Network Activity</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="operatorNetworkProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="metric-details">
+                                    <span class="metric-value" id="operatorNetworkValue">0%</span>
+                                    <span class="metric-extra" id="operatorNetworkSpeed">↑ 0 MB/s ↓ 0 MB/s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monitor-card">
+                        <h3>
+                            <svg class="monitor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Sensor Status
+                        </h3>
+                        <div class="sensor-list" id="operatorSensorList">
+                            <!-- Sensors will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="monitor-card">
+                        <h3>
+                            <svg class="monitor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            System Health
+                        </h3>
+                        <div class="health-indicators">
+                            <div class="health-item">
+                                <div class="health-info">
+                                    <span class="health-label">Camera System</span>
+                                    <span class="health-detail" id="operatorCameraDetail">System Offline</span>
+                                </div>
+                                <span class="health-status" id="operatorCameraStatus">Offline</span>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-info">
+                                    <span class="health-label">Measurement Engine</span>
+                                    <span class="health-detail" id="operatorMeasurementDetail">System Offline</span>
+                                </div>
+                                <span class="health-status" id="operatorMeasurementStatus">Offline</span>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-info">
+                                    <span class="health-label">Database</span>
+                                    <span class="health-detail" id="operatorDatabaseDetail">System Offline</span>
+                                </div>
+                                <span class="health-status" id="operatorDatabaseStatus">Offline</span>
+                            </div>
+                            <div class="health-item">
+                                <div class="health-info">
+                                    <span class="health-label">API Server</span>
+                                    <span class="health-detail" id="operatorApiDetail">System Offline</span>
+                                </div>
+                                <span class="health-status" id="operatorApiStatus">Offline</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monitor-card">
+                        <h3>
+                            <svg class="monitor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Recent System Events
+                        </h3>
+                        <div class="events-list" id="operatorEventsList">
+                            <!-- Events will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <h2>
+                            <svg class="chart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Performance Trends
+                        </h2>
+                        <div class="chart-container">
+                            <div id="operatorPerformanceChart"></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h2>
+                            <svg class="chart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Sensor Activity
+                        </h2>
+                        <div class="chart-container">
+                            <div id="operatorSensorChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveProfile();">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Setup Location</label>
+                    <select id="profileLocation">
+                        <option value="">Select a location</option>
+                        <option value="Factory Floor A, Station 1">Factory Floor A, Station 1</option>
+                        <option value="Factory Floor A, Station 2">Factory Floor A, Station 2</option>
+                        <option value="Factory Floor B, Station 1">Factory Floor B, Station 1</option>
+                        <option value="Factory Floor B, Station 2">Factory Floor B, Station 2</option>
+                        <option value="Factory Floor C, Station 1">Factory Floor C, Station 1</option>
+                        <option value="Main Office">Main Office</option>
+                        <option value="Quality Control Lab">Quality Control Lab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileIdNumber">ID Number</label>
+                    <input type="text" id="profileIdNumber" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
+    <script src="admin-dashboard.js"></script>
+    <script src="monitoring-charts.js"></script>
+    <script src="profile-edit.js"></script>
+    <script>
+        // Get users from database API
+        async function getUsers() {
+            try {
+                const response = await apiRequest(API_CONFIG.ENDPOINTS.ADMIN_USERS_STATS);
+                if (response.success) {
+                    return response.users || [];
+                }
+            } catch (error) {
+                console.error('Failed to load users:', error);
+            }
+            return [];
+        }
+
+        // Get operators (users with role 'user')
+        async function getOperators() {
+            const users = await getUsers();
+            return users.filter(u => u.role === 'user');
+        }
+
+        // Check if operator is online (simulated - based on system status)
+        function isOperatorOnline(username) {
+            // Check if user has system status set (per-operator override)
+            const userSystemStatus = localStorage.getItem(`systemStatus_${username}`);
+            if (userSystemStatus !== null) {
+                return userSystemStatus !== 'false';
+            }
+            // Default: check global system status
+            return localStorage.getItem('systemStatus') !== 'false';
+        }
+        
+        // Check if operator sensors are online
+        function isOperatorSensorsOnline(username) {
+            // Check if user has sensor status set (per-operator override)
+            const userSensorsStatus = localStorage.getItem(`sensorsStatus_${username}`);
+            if (userSensorsStatus !== null) {
+                return userSensorsStatus !== 'false';
+            }
+            // Default: check global sensor status
+            return localStorage.getItem('sensorsStatus') !== 'false';
+        }
+        
+        // Add system event for operator
+        function addOperatorSystemEvent(username, message, type) {
+            const systemEvents = JSON.parse(localStorage.getItem('systemEvents') || '[]');
+            const newEvent = {
+                time: 'Just now',
+                message: message,
+                type: type,
+                timestamp: new Date().toISOString(),
+                username: username
+            };
+            systemEvents.unshift(newEvent);
+            // Keep only last 50 events per user
+            const userEvents = systemEvents.filter(e => e.username === username);
+            if (userEvents.length > 50) {
+                const toRemove = userEvents.slice(50);
+                toRemove.forEach(event => {
+                    const index = systemEvents.findIndex(e => e.timestamp === event.timestamp && e.username === event.username);
+                    if (index !== -1) systemEvents.splice(index, 1);
+                });
+            }
+            localStorage.setItem('systemEvents', JSON.stringify(systemEvents));
+            
+            // Refresh events if viewing this operator's details
+            if (currentOperatorUsername === username) {
+                loadOperatorEvents(username);
+            }
+        }
+        
+        // Toggle operator system
+        function toggleOperatorSystem(username) {
+            const currentStatus = isOperatorOnline(username);
+            const newStatus = !currentStatus;
+            
+            localStorage.setItem(`systemStatus_${username}`, newStatus.toString());
+            
+            // Add system event
+            addOperatorSystemEvent(
+                username, 
+                `System ${newStatus ? 'turned ON' : 'turned OFF'} by administrator`, 
+                newStatus ? 'success' : 'warning'
+            );
+            
+            // Show notification
+            const message = document.createElement('div');
+            message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: ' + (newStatus ? '#10b981' : '#ef4444') + '; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 0.75rem;';
+            message.innerHTML = `
+                <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3Z" stroke="currentColor" stroke-width="2"/>
+                    ${newStatus ? '<path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' : ''}
+                </svg>
+                <span>Operator system ${newStatus ? 'turned ON' : 'turned OFF'}</span>
+            `;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 2000);
+            
+            // Reload operators to reflect changes
+            loadOperators();
+            
+            // If viewing this operator's details, refresh them
+            if (currentOperatorUsername === username) {
+                loadOperatorDetails(username);
+                updateOperatorCharts();
+            }
+        }
+        
+        // Toggle operator sensors
+        function toggleOperatorSensors(username) {
+            const allSensors = JSON.parse(localStorage.getItem('userSensors') || '[]');
+            const operatorSensors = allSensors.filter(s => s.username === username);
+            
+            // Check current status - if all individual sensors are off, we turn them on
+            const allSensorsOff = operatorSensors.length > 0 && operatorSensors.every(s => s.status === 'offline');
+            const newStatus = allSensorsOff || !isOperatorSensorsOnline(username);
+            
+            // Update the global toggle for this operator
+            localStorage.setItem(`sensorsStatus_${username}`, newStatus.toString());
+            
+            // Update all individual sensor statuses
+            if (operatorSensors.length > 0) {
+                operatorSensors.forEach(sensor => {
+                    sensor.status = newStatus ? 'online' : 'offline';
+                });
+                
+                // Update sensors in localStorage
+                const updatedAllSensors = allSensors.map(s => {
+                    const updated = operatorSensors.find(os => os.id === s.id);
+                    return updated || s;
+                });
+                localStorage.setItem('userSensors', JSON.stringify(updatedAllSensors));
+            }
+            
+            // Add system event
+            addOperatorSystemEvent(
+                username, 
+                `Sensors ${newStatus ? 'turned ON' : 'turned OFF'} by administrator`, 
+                newStatus ? 'success' : 'warning'
+            );
+            
+            // Dispatch event to update other pages
+            window.dispatchEvent(new CustomEvent('sensorsUpdated'));
+            
+            // Show notification
+            const message = document.createElement('div');
+            message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: ' + (newStatus ? '#2FA76E' : '#6b7280') + '; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 0.75rem;';
+            message.innerHTML = `
+                <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Operator sensors ${newStatus ? 'turned ON' : 'turned OFF'}</span>
+            `;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 2000);
+            
+            // Reload operators to reflect changes
+            loadOperators();
+            
+            // If viewing this operator's details, refresh them
+            if (currentOperatorUsername === username) {
+                loadOperatorDetails(username);
+                loadOperatorSensors(username);
+                updateOperatorCharts();
+            }
+        }
+
+        // Load and display operators
+        async function loadOperators() {
+            const operators = await getOperators();
+            const operatorsGrid = document.getElementById('operatorsGrid');
+            
+            if (!operatorsGrid) return;
+            
+            if (operators.length === 0) {
+                operatorsGrid.innerHTML = `
+                    <div class="no-operators">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">No Operators Found</p>
+                        <p>No factory operators have been added yet. Add operators in User Management.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Get sensors from API
+            let allSensors = [];
+            try {
+                const sensorsResponse = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS);
+                allSensors = sensorsResponse.sensors || [];
+            } catch (error) {
+                console.error('Failed to load sensors:', error);
+            }
+            
+            operatorsGrid.innerHTML = operators.map(operator => {
+                const isOnline = isOperatorOnline(operator.username);
+                const operatorSensors = allSensors.filter(s => s.user_id === operator.id);
+                const onlineSensors = operatorSensors.filter(s => s.status === 'online' || !s.status).length;
+                
+                // Use stats from database (correctly accessing operator.stats)
+                const operatorStats = operator.stats || {};
+                const stats = {
+                    totalRecords: operatorStats.totalRecords || 0,
+                    completedSessions: operatorStats.completedSessions || 0,
+                    totalSessions: operatorStats.totalSessions || 0,
+                    totalPellets: operatorStats.totalPellets || 0
+                };
+                
+                // Define stat items with labels and values - dynamically based on database
+                // Labels update based on what data is available in the database
+                const statItems = [];
+                
+                // Add Records stat if available
+                if (stats.totalRecords !== undefined) {
+                    statItems.push({
+                        value: stats.totalRecords,
+                        label: 'Total Records',
+                        formatter: (v) => v.toLocaleString()
+                    });
+                }
+                
+                // Add Sessions stat - label updates based on database data
+                if (stats.totalSessions !== undefined || stats.completedSessions !== undefined) {
+                    const sessionsLabel = stats.totalSessions > 0 
+                        ? `Completed Sessions (${stats.completedSessions}/${stats.totalSessions})`
+                        : 'Completed Sessions';
+                    statItems.push({
+                        value: stats.completedSessions,
+                        label: sessionsLabel,
+                        formatter: (v) => stats.totalSessions > 0 ? `${stats.completedSessions}/${stats.totalSessions}` : v
+                    });
+                }
+                
+                // Add Pellets stat if available
+                if (stats.totalPellets !== undefined) {
+                    statItems.push({
+                        value: stats.totalPellets,
+                        label: 'Total Pellets',
+                        formatter: (v) => v.toLocaleString()
+                    });
+                }
+                
+                // Ensure we always have at least 3 stats (fill with zeros if needed)
+                while (statItems.length < 3) {
+                    statItems.push({
+                        value: 0,
+                        label: 'N/A',
+                        formatter: (v) => '-'
+                    });
+                }
+                
+                // Check if all individual sensors are off (not the global toggle)
+                const allSensorsOff = operatorSensors.length > 0 && operatorSensors.every(s => s.status === 'offline');
+                
+                // Check operator-specific sensor status from localStorage
+                const operatorSensorsStatus = localStorage.getItem(`sensorsStatus_${operator.username}`);
+                let sensorsStatus;
+                if (allSensorsOff) {
+                    // If all individual sensors are off, button should show "off" state
+                    sensorsStatus = false;
+                } else {
+                    sensorsStatus = operatorSensorsStatus !== null 
+                        ? operatorSensorsStatus !== 'false' 
+                        : localStorage.getItem('sensorsStatus') !== 'false';
+                }
+                
+                // Generate stat items HTML dynamically
+                const statsHTML = statItems.map(item => `
+                    <div class="operator-stat-item">
+                        <div class="operator-stat-value">${item.formatter(item.value)}</div>
+                        <div class="operator-stat-label">${item.label}</div>
+                    </div>
+                `).join('');
+                
+                return `
+                    <div class="operator-card" onclick="viewOperatorDetails('${operator.username}')">
+                        <div class="operator-card-header">
+                            <div class="operator-avatar">${operator.name.charAt(0).toUpperCase()}</div>
+                            <div class="operator-info">
+                                <h3>${operator.name}</h3>
+                                <p>@${operator.username}</p>
+                                ${operator.idNumber ? `<p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">ID Number: ${operator.idNumber}</p>` : ''}
+                            </div>
+                            <div class="operator-status-badge ${isOnline ? 'online' : 'offline'}">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="${isOnline ? 'currentColor' : 'none'}"/>
+                                </svg>
+                                ${isOnline ? 'Online' : 'Offline'}
+                            </div>
+                        </div>
+                        <div class="operator-stats">
+                            ${statsHTML}
+                        </div>
+                        <div class="operator-details">
+                            <div class="operator-detail-item">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span><strong>Location:</strong> ${operator.location || 'Not assigned'}</span>
+                            </div>
+                            <div class="operator-detail-item">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span><strong>Sensors:</strong> ${operatorSensors.length} (${onlineSensors} online)</span>
+                            </div>
+                        </div>
+                        <div class="operator-controls">
+                            <button class="operator-control-btn ${isOnline ? 'system-on' : 'system-off'}" onclick="event.stopPropagation(); toggleOperatorSystem('${operator.username}')" title="${isOnline ? 'Turn off' : 'Turn on'} system">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                ${isOnline ? 'System On' : 'System Off'}
+                            </button>
+                            <button class="operator-control-btn ${sensorsStatus && isOnline ? 'sensors-on' : 'sensors-off'}" onclick="event.stopPropagation(); toggleOperatorSensors('${operator.username}')" title="${sensorsStatus && isOnline ? 'Turn off' : 'Turn on'} sensors">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                ${sensorsStatus && isOnline ? 'Sensors On' : 'Sensors Off'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // View operator details
+        let currentOperatorUsername = null;
+        let operatorPerformanceChart = null;
+        let operatorSensorChart = null;
+
+        async function viewOperatorDetails(username) {
+            currentOperatorUsername = username;
+            const operators = await getOperators();
+            const operator = operators.find(o => o.username === username);
+            
+            if (!operator) return;
+            
+            // Show detail view, hide list view
+            document.getElementById('operatorsListView').classList.add('hidden');
+            document.getElementById('operatorDetailView').classList.add('active');
+            
+            // Update header
+            document.getElementById('operatorDetailName').textContent = `${operator.name}'s System Monitoring`;
+            document.getElementById('operatorDetailSubtitle').textContent = `@${operator.username} • ${operator.location || 'No location'}`;
+            
+            // Load operator data
+            loadOperatorDetails(username);
+            
+            // Initialize charts
+            setTimeout(() => {
+                initializeOperatorCharts();
+            }, 100);
+        }
+
+        // Show operators list
+        function showOperatorsList() {
+            document.getElementById('operatorsListView').classList.remove('hidden');
+            document.getElementById('operatorDetailView').classList.remove('active');
+            currentOperatorUsername = null;
+            
+            // Destroy charts
+            if (operatorPerformanceChart) {
+                operatorPerformanceChart.destroy();
+                operatorPerformanceChart = null;
+            }
+            if (operatorSensorChart) {
+                operatorSensorChart.destroy();
+                operatorSensorChart = null;
+            }
+        }
+
+        // Load operator details
+        function loadOperatorDetails(username) {
+            const isOnline = isOperatorOnline(username);
+            
+            // Update performance metrics
+            updateOperatorPerformanceMetrics(username, isOnline);
+            
+            // Update sensors
+            loadOperatorSensors(username);
+            
+            // Update system health
+            updateOperatorSystemHealth(isOnline);
+            
+            // Load system events
+            loadOperatorEvents(username);
+        }
+        
+        // Load operator system events from database
+        async function loadOperatorEvents(username) {
+            const eventsList = document.getElementById('operatorEventsList');
+            if (!eventsList) return;
+            
+            try {
+                // Get sessions for this operator from database
+                const allUsers = await getUsers();
+                const operator = allUsers.find(u => u.username === username);
+                
+                if (!operator) {
+                    eventsList.innerHTML = '<p class="no-data">Operator not found</p>';
+                    return;
+                }
+                
+                // Get sessions from database
+                const sessionsResponse = await apiRequest(API_CONFIG.ENDPOINTS.SESSIONS);
+                const userSessions = (sessionsResponse.sessions || [])
+                    .filter(s => s.user_id === operator.id)
+                    .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+                    .slice(0, 10);
+                
+                // Convert sessions to events
+                let events = [];
+                userSessions.forEach(session => {
+                    // Session start event
+                    events.push({
+                        timestamp: session.start_time,
+                        message: `Session #${session.id} started`,
+                        type: 'info'
+                    });
+                    
+                    // Session end event if completed
+                    if (session.status === 'completed' && session.end_time) {
+                        events.push({
+                            timestamp: session.end_time,
+                            message: `Session #${session.id} completed with ${session.measurement_count || 0} records`,
+                            type: 'success'
+                        });
+                    }
+                });
+                
+                // Also check for localStorage events for system on/off
+                const localEvents = JSON.parse(localStorage.getItem('systemEvents') || '[]');
+                const operatorEvents = localEvents.filter(event => event.username === username);
+                events = events.concat(operatorEvents);
+                
+                // Sort by timestamp descending
+                events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                if (events.length === 0) {
+                    eventsList.innerHTML = '<p class="no-data" style="text-align: center; padding: 2rem; color: var(--text-secondary);">No recent events</p>';
+                    return;
+                }
+                
+                eventsList.innerHTML = events.slice(0, 10).map(event => {
+                    const timeText = getTimeAgo(event.timestamp);
+                    return `
+                        <div class="event-item event-${event.type}">
+                            <span class="event-time">${timeText}</span>
+                            <span class="event-message">${event.message}</span>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Failed to load operator events:', error);
+                eventsList.innerHTML = '<p class="no-data">Failed to load events</p>';
+            }
+        }
+        
+        function getTimeAgo(timestamp) {
+            if (!timestamp) return 'Unknown';
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = Math.floor((now - time) / 1000);
+            
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+            return `${Math.floor(diff / 86400)} days ago`;
+        }
+
+        // Update operator performance metrics
+        function updateOperatorPerformanceMetrics(username, isOnline) {
+            if (!isOnline) {
+                document.getElementById('operatorCpuProgress').style.width = '0%';
+                document.getElementById('operatorCpuValue').textContent = '0%';
+                if (document.getElementById('operatorCpuTemp')) document.getElementById('operatorCpuTemp').textContent = 'Temp: --°C';
+                document.getElementById('operatorMemoryProgress').style.width = '0%';
+                document.getElementById('operatorMemoryValue').textContent = '0%';
+                if (document.getElementById('operatorMemoryUsed')) document.getElementById('operatorMemoryUsed').textContent = '0 GB / 0 GB';
+                document.getElementById('operatorDiskProgress').style.width = '0%';
+                document.getElementById('operatorDiskValue').textContent = '0%';
+                if (document.getElementById('operatorDiskFree')) document.getElementById('operatorDiskFree').textContent = 'Free: -- GB';
+                document.getElementById('operatorNetworkProgress').style.width = '0%';
+                document.getElementById('operatorNetworkValue').textContent = '0%';
+                if (document.getElementById('operatorNetworkSpeed')) document.getElementById('operatorNetworkSpeed').textContent = '↑ 0 MB/s ↓ 0 MB/s';
+                return;
+            }
+            
+            // Simulate performance metrics
+            const cpu = Math.floor(Math.random() * 30) + 30;
+            const memory = Math.floor(Math.random() * 30) + 50;
+            const disk = Math.floor(Math.random() * 20) + 30;
+            const network = Math.floor(Math.random() * 20) + 20;
+            
+            document.getElementById('operatorCpuProgress').style.width = cpu + '%';
+            document.getElementById('operatorCpuValue').textContent = cpu + '%';
+            if (document.getElementById('operatorCpuTemp')) {
+                const temp = Math.floor(Math.random() * 15) + 45;
+                document.getElementById('operatorCpuTemp').textContent = `Temp: ${temp}°C`;
+            }
+            
+            document.getElementById('operatorMemoryProgress').style.width = memory + '%';
+            document.getElementById('operatorMemoryValue').textContent = memory + '%';
+            if (document.getElementById('operatorMemoryUsed')) {
+                const totalGB = 6.8;
+                const usedGB = (totalGB * memory / 100).toFixed(1);
+                document.getElementById('operatorMemoryUsed').textContent = `${usedGB} GB / ${totalGB} GB`;
+            }
+            
+            document.getElementById('operatorDiskProgress').style.width = disk + '%';
+            document.getElementById('operatorDiskValue').textContent = disk + '%';
+            if (document.getElementById('operatorDiskFree')) {
+                const freeGB = Math.floor(Math.random() * 50) + 100;
+                document.getElementById('operatorDiskFree').textContent = `Free: ${freeGB} GB`;
+            }
+            
+            document.getElementById('operatorNetworkProgress').style.width = network + '%';
+            document.getElementById('operatorNetworkValue').textContent = network + '%';
+            if (document.getElementById('operatorNetworkSpeed')) {
+                const upSpeed = (Math.random() * 2 + 1.5).toFixed(1);
+                const downSpeed = (Math.random() * 2 + 1.2).toFixed(1);
+                document.getElementById('operatorNetworkSpeed').textContent = `↑ ${upSpeed} MB/s ↓ ${downSpeed} MB/s`;
+            }
+        }
+
+        // Load operator sensors from database
+        async function loadOperatorSensors(username) {
+            let operatorSensors = [];
+            try {
+                const response = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS);
+                const allUsers = await getUsers();
+                const operator = allUsers.find(u => u.username === username);
+                if (operator) {
+                    operatorSensors = (response.sensors || []).filter(s => s.user_id === operator.id);
+                }
+            } catch (error) {
+                console.error('Failed to load sensors:', error);
+            }
+            
+            const sensorsStatus = isOperatorSensorsOnline(username);
+            const isOnline = isOperatorOnline(username);
+            
+            const sensorList = document.getElementById('operatorSensorList');
+            if (!sensorList) return;
+            
+            if (operatorSensors.length === 0) {
+                sensorList.innerHTML = `
+                    <div class="no-sensors-message" style="text-align: center; padding: 3rem 2rem; color: var(--text-secondary);">
+                        <svg style="width: 64px; height: 64px; margin: 0 auto 1rem; opacity: 0.5;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">No Sensors Added</p>
+                        <p style="font-size: 0.875rem;">This operator has not added any sensors yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const typeMap = {
+                'camera': 'Camera Sensor',
+                'measurement': 'Size Measurement Sensor',
+                'temperature': 'Temperature Sensor',
+                'motion': 'Motion Sensor',
+                'pressure': 'Pressure Sensor'
+            };
+            
+            const now = new Date();
+            
+            sensorList.innerHTML = operatorSensors.map((sensor, index) => {
+                let sensorStatus;
+                if (!isOnline) {
+                    sensorStatus = 'offline';
+                } else if (!sensorsStatus) {
+                    // Global toggle is off
+                    sensorStatus = 'offline';
+                } else {
+                    // Use individual sensor status
+                    sensorStatus = sensor.status || 'online';
+                }
+                
+                const sensorType = sensor.sensor_type || sensor.type || 'unknown';
+                const displayName = sensor.name || typeMap[sensorType] || 'Unknown Sensor';
+                const displayType = typeMap[sensorType] || sensorType || 'Unknown';
+                
+                // Get created_at (for fallback calculation)
+                const createdAt = sensor.created_at || sensor.createdAt || Date.now();
+                
+                // Format calibration date
+                let calibrationInfo = '';
+                const calibrationDate = sensor.calibration_date || sensor.calibrationDate;
+                if (calibrationDate) {
+                    const calDate = new Date(calibrationDate);
+                    const daysSinceCal = Math.floor((now - calDate) / (1000 * 60 * 60 * 24));
+                    if (daysSinceCal === 0) {
+                        calibrationInfo = 'Calibrated today';
+                    } else if (daysSinceCal === 1) {
+                        calibrationInfo = 'Calibrated yesterday';
+                    } else if (daysSinceCal < 30) {
+                        calibrationInfo = `Calibrated ${daysSinceCal} days ago`;
+                    } else {
+                        calibrationInfo = `Calibrated ${calDate.toLocaleDateString()}`;
+                    }
+                } else {
+                    calibrationInfo = 'Not calibrated';
+                }
+                
+                // Format dates
+                const formatDate = (dateStr) => {
+                    if (!dateStr) return 'N/A';
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                };
+                
+                const formatDateTime = (dateStr) => {
+                    if (!dateStr) return 'N/A';
+                    const date = new Date(dateStr);
+                    return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                };
+                
+                // Get location (prefer location_name, fallback to location)
+                const sensorLocation = sensor.location_name || sensor.location || 'Not assigned';
+                
+                // Format next calibration date
+                let nextCalibrationInfo = 'Not scheduled';
+                if (sensor.next_calibration_date) {
+                    const nextCalDate = new Date(sensor.next_calibration_date);
+                    const daysUntilCal = Math.floor((nextCalDate - now) / (1000 * 60 * 60 * 24));
+                    if (daysUntilCal < 0) {
+                        nextCalibrationInfo = `Overdue by ${Math.abs(daysUntilCal)} days`;
+                    } else if (daysUntilCal === 0) {
+                        nextCalibrationInfo = 'Due today';
+                    } else if (daysUntilCal <= 7) {
+                        nextCalibrationInfo = `Due in ${daysUntilCal} days`;
+                    } else {
+                        nextCalibrationInfo = formatDate(sensor.next_calibration_date);
+                    }
+                }
+                
+                // Get updated_at (prefer updated_at, fallback to created_at)
+                const updatedAt = sensor.updated_at || sensor.created_at || sensor.createdAt;
+                const updatedDate = updatedAt ? new Date(updatedAt) : now;
+                const updatedDiffSeconds = Math.floor((now - updatedDate) / 1000);
+                let lastUpdate = '';
+                if (updatedDiffSeconds < 60) {
+                    lastUpdate = `${updatedDiffSeconds}s ago`;
+                } else if (updatedDiffSeconds < 3600) {
+                    lastUpdate = `${Math.floor(updatedDiffSeconds / 60)}m ago`;
+                } else if (updatedDiffSeconds < 86400) {
+                    lastUpdate = `${Math.floor(updatedDiffSeconds / 3600)}h ago`;
+                } else {
+                    lastUpdate = `${Math.floor(updatedDiffSeconds / 86400)}d ago`;
+                }
+                
+                return `
+                    <div class="sensor-item">
+                        <div class="sensor-header">
+                            <div class="sensor-name">
+                                ${displayName}
+                                <span class="sensor-id-badge">ID: ${sensor.id}</span>
+                            </div>
+                            <span class="sensor-status status-${sensorStatus}">${sensorStatus}</span>
+                        </div>
+                        <div class="sensor-details">
+                            <div class="sensor-detail-item">
+                                <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="sensor-detail-label">Type:</span>
+                                <span class="sensor-detail-value">${displayType}</span>
+                            </div>
+                            <div class="sensor-detail-item">
+                                <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <span class="sensor-detail-label">Location:</span>
+                                <span class="sensor-detail-value">${sensorLocation}</span>
+                            </div>
+                            <div class="sensor-detail-item">
+                                <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="sensor-detail-label">Calibrated:</span>
+                                <span class="sensor-detail-value">${calibrationInfo}</span>
+                            </div>
+                            <div class="sensor-detail-item">
+                                <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span class="sensor-detail-label">Last Update:</span>
+                                <span class="sensor-detail-value">${lastUpdate}</span>
+                            </div>
+                        </div>
+                        <div class="sensor-stats-grid">
+                            <div class="sensor-stat-item">
+                                <span class="sensor-stat-label">Created</span>
+                                <span class="sensor-stat-value">${formatDate(createdAt)}</span>
+                            </div>
+                            <div class="sensor-stat-item">
+                                <span class="sensor-stat-label">Last Updated</span>
+                                <span class="sensor-stat-value">${updatedAt ? formatDateTime(updatedAt) : 'N/A'}</span>
+                            </div>
+                            <div class="sensor-stat-item">
+                                <span class="sensor-stat-label">Calibration Date</span>
+                                <span class="sensor-stat-value">${calibrationDate ? formatDate(calibrationDate) : 'N/A'}</span>
+                            </div>
+                            <div class="sensor-stat-item">
+                                <span class="sensor-stat-label">Next Calibration</span>
+                                <span class="sensor-stat-value">${nextCalibrationInfo}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update operator system health
+        function updateOperatorSystemHealth(isOnline) {
+            const healthItems = [
+                { id: 'operatorCameraStatus', detailId: 'operatorCameraDetail', name: 'Camera System' },
+                { id: 'operatorMeasurementStatus', detailId: 'operatorMeasurementDetail', name: 'Measurement Engine' },
+                { id: 'operatorDatabaseStatus', detailId: 'operatorDatabaseDetail', name: 'Database' },
+                { id: 'operatorApiStatus', detailId: 'operatorApiDetail', name: 'API Server' }
+            ];
+            
+            // Calculate uptime (simulated)
+            const days = 2;
+            const hours = 14;
+            const uptimeText = `Uptime: ${days}d ${hours}h`;
+            
+            healthItems.forEach(({ id, detailId, name }) => {
+                const statusElement = document.getElementById(id);
+                const detailElement = document.getElementById(detailId);
+                
+                if (statusElement) {
+                    if (isOnline) {
+                        statusElement.className = 'health-status status-online';
+                        statusElement.textContent = 'Online';
+                    } else {
+                        statusElement.className = 'health-status status-offline';
+                        statusElement.textContent = 'Offline';
+                    }
+                }
+                
+                if (detailElement && isOnline) {
+                    let detailText = uptimeText;
+                    if (name === 'Camera System') {
+                        const response = Math.floor(Math.random() * 10) + 8;
+                        detailText += ` • Response: ${response}ms`;
+                    } else if (name === 'Measurement Engine') {
+                        const response = Math.floor(Math.random() * 8) + 5;
+                        detailText += ` • Response: ${response}ms`;
+                    } else if (name === 'Database') {
+                        const queries = Math.floor(Math.random() * 500) + 1000;
+                        detailText += ` • Queries: ${queries.toLocaleString()}/min`;
+                    } else if (name === 'API Server') {
+                        const response = Math.floor(Math.random() * 10) + 10;
+                        detailText += ` • Response: ${response}ms`;
+                    }
+                    detailElement.textContent = detailText;
+                } else if (detailElement) {
+                    detailElement.textContent = 'System Offline';
+                }
+            });
+        }
+
+        // Initialize operator charts
+        function initializeOperatorCharts() {
+            if (typeof ApexCharts === 'undefined') {
+                setTimeout(initializeOperatorCharts, 100);
+                return;
+            }
+            
+            const perfCtx = document.getElementById('operatorPerformanceChart');
+            const sensCtx = document.getElementById('operatorSensorChart');
+            
+            if (perfCtx && !operatorPerformanceChart) {
+                const perfOptions = {
+                    series: [
+                        { name: 'CPU', data: [] },
+                        { name: 'Memory', data: [] },
+                        { name: 'Disk', data: [] },
+                        { name: 'Network', data: [] }
+                    ],
+                    chart: {
+                        type: 'area',
+                        height: 350,
+                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: false,
+                                zoom: false,
+                                zoomin: false,
+                                zoomout: false,
+                                pan: false,
+                                reset: false
+                            }
+                        },
+                        animations: {
+                            enabled: true,
+                            easing: 'easeinout',
+                            speed: 800
+                        }
+                    },
+                    colors: ['#2FA76E', '#FF6B6B', '#4ECDC4', '#FFE66D'],
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth',
+                        width: [3, 3, 3, 3]
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shade: 'light',
+                            type: 'vertical',
+                            shadeIntensity: 0.2,
+                            gradientToColors: ['#4ECDC4', '#FFA07A', '#95E1D3', '#FFD700'],
+                            inverseColors: false,
+                            opacityFrom: 0.5,
+                            opacityTo: 0.05,
+                            stops: [0, 90, 100]
+                        }
+                    },
+                    markers: {
+                        size: [4, 4, 4, 4],
+                        strokeWidth: [2, 2, 2, 2],
+                        strokeColors: '#fff',
+                        hover: {
+                            size: 7
+                        }
+                    },
+                    xaxis: {
+                        categories: [],
+                        title: {
+                            text: 'Time',
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color: '#6B7280'
+                            }
+                        },
+                        labels: {
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                colors: '#6B7280'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            text: 'Usage (%)',
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color: '#6B7280'
+                            }
+                        },
+                        labels: {
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                colors: '#6B7280'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        theme: 'dark',
+                        shared: true,
+                        intersect: false,
+                        y: {
+                            formatter: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        horizontalAlign: 'center',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        labels: {
+                            colors: '#374151'
+                        },
+                        markers: {
+                            width: 12,
+                            height: 12,
+                            radius: 12
+                        }
+                    },
+                    grid: {
+                        borderColor: '#e5e7eb',
+                        strokeDashArray: 0,
+                        xaxis: {
+                            lines: {
+                                show: false
+                            }
+                        },
+                        yaxis: {
+                            lines: {
+                                show: true
+                            }
+                        }
+                    }
+                };
+                operatorPerformanceChart = new ApexCharts(perfCtx, perfOptions);
+                operatorPerformanceChart.render();
+            }
+            
+            if (sensCtx && !operatorSensorChart) {
+                const sensOptions = {
+                    series: [{
+                        name: 'Activity',
+                        data: []
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 350,
+                        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: false,
+                                zoom: false,
+                                zoomin: false,
+                                zoomout: false,
+                                pan: false,
+                                reset: false
+                            }
+                        },
+                        animations: {
+                            enabled: true,
+                            easing: 'easeinout',
+                            speed: 800
+                        }
+                    },
+                    colors: ['#2FA76E'],
+                    plotOptions: {
+                        bar: {
+                            borderRadius: 8,
+                            columnWidth: '80%',
+                            distributed: true,
+                            dataLabels: {
+                                position: 'top'
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                        categories: [],
+                        title: {
+                            text: 'Sensor',
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color: '#6B7280'
+                            }
+                        },
+                        labels: {
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                colors: '#6B7280'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            text: 'Activity (%)',
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 600,
+                                color: '#6B7280'
+                            }
+                        },
+                        labels: {
+                            style: {
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                colors: '#6B7280'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        theme: 'dark',
+                        y: {
+                            formatter: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    legend: {
+                        show: false
+                    },
+                    grid: {
+                        borderColor: '#e5e7eb',
+                        strokeDashArray: 0,
+                        xaxis: {
+                            lines: {
+                                show: false
+                            }
+                        },
+                        yaxis: {
+                            lines: {
+                                show: true
+                            }
+                        }
+                    }
+                };
+                operatorSensorChart = new ApexCharts(sensCtx, sensOptions);
+                operatorSensorChart.render();
+            }
+            
+            updateOperatorCharts();
+        }
+
+        // Update operator charts with real database data
+        async function updateOperatorCharts() {
+            if (!currentOperatorUsername) return;
+            
+            const isOnline = isOperatorOnline(currentOperatorUsername);
+            const sensorsOnline = isOperatorSensorsOnline(currentOperatorUsername);
+            
+            // Update performance chart
+            if (operatorPerformanceChart) {
+                if (isOnline) {
+                    const labels = [];
+                    const cpuData = [];
+                    const memoryData = [];
+                    const diskData = [];
+                    const networkData = [];
+                    
+                    for (let i = 11; i >= 0; i--) {
+                        const date = new Date();
+                        date.setHours(date.getHours() - i);
+                        labels.push(date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+                        cpuData.push(Math.floor(Math.random() * 30) + 30);
+                        memoryData.push(Math.floor(Math.random() * 30) + 50);
+                        diskData.push(Math.floor(Math.random() * 20) + 30);
+                        networkData.push(Math.floor(Math.random() * 20) + 20);
+                    }
+                    
+                    operatorPerformanceChart.updateOptions({
+                        xaxis: {
+                            categories: labels
+                        }
+                    });
+                    operatorPerformanceChart.updateSeries([
+                        { name: 'CPU', data: cpuData },
+                        { name: 'Memory', data: memoryData },
+                        { name: 'Disk', data: diskData },
+                        { name: 'Network', data: networkData }
+                    ]);
+                } else {
+                    // System is off - clear all data
+                    operatorPerformanceChart.updateOptions({
+                        xaxis: {
+                            categories: []
+                        }
+                    });
+                    operatorPerformanceChart.updateSeries([
+                        { name: 'CPU', data: [] },
+                        { name: 'Memory', data: [] },
+                        { name: 'Disk', data: [] },
+                        { name: 'Network', data: [] }
+                    ]);
+                }
+            }
+            
+            // Update sensor chart with real database data
+            if (operatorSensorChart) {
+                const colorPalette = ['#2FA76E', '#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181'];
+                
+                // Fetch sensors from database
+                let operatorSensors = [];
+                try {
+                    const response = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS);
+                    const allUsers = await getUsers();
+                    const operator = allUsers.find(u => u.username === currentOperatorUsername);
+                    if (operator) {
+                        operatorSensors = (response.sensors || []).filter(s => s.user_id === operator.id);
+                    }
+                } catch (error) {
+                    console.error('Failed to load sensors for chart:', error);
+                }
+                
+                // If system is off or sensors are off, clear the chart
+                if (!isOnline || !sensorsOnline) {
+                    operatorSensorChart.updateOptions({
+                        xaxis: {
+                            categories: []
+                        },
+                        colors: []
+                    });
+                    operatorSensorChart.updateSeries([{
+                        name: 'Activity',
+                        data: []
+                    }]);
+                } else if (operatorSensors.length > 0) {
+                    // System and sensors are on - show sensor data from database
+                    const typeMap = {
+                        'camera': 'Camera',
+                        'measurement': 'Measurement',
+                        'temperature': 'Temperature',
+                        'motion': 'Motion',
+                        'pressure': 'Pressure'
+                    };
+                    
+                    const sensorLabels = operatorSensors.map(s => {
+                        const sensorType = s.sensor_type || s.type || 'Unknown';
+                        return s.name || typeMap[sensorType] || sensorType;
+                    });
+                    
+                    // Activity based on sensor status from database
+                    const sensorData = operatorSensors.map(s => {
+                        const status = s.status || 'offline';
+                        if (status === 'online' || status === 'active') return Math.floor(Math.random() * 10) + 90;
+                        if (status === 'idle') return Math.floor(Math.random() * 20) + 40;
+                        return 0;
+                    });
+                    
+                    const sensorColors = operatorSensors.map((s, i) => {
+                        const status = s.status || 'offline';
+                        if (status === 'online' || status === 'active') return colorPalette[i % colorPalette.length];
+                        if (status === 'idle') return '#FFE66D';
+                        return '#E5E7EB';
+                    });
+                    
+                    operatorSensorChart.updateOptions({
+                        xaxis: {
+                            categories: sensorLabels
+                        },
+                        colors: sensorColors
+                    });
+                    operatorSensorChart.updateSeries([{
+                        name: 'Activity',
+                        data: sensorData
+                    }]);
+                } else {
+                    // No sensors added yet
+                    operatorSensorChart.updateOptions({
+                        xaxis: {
+                            categories: ['No Sensors']
+                        },
+                        colors: ['#E5E7EB']
+                    });
+                    operatorSensorChart.updateSeries([{
+                        name: 'Activity',
+                        data: [0]
+                    }]);
+                }
+            }
+        }
+
+        // Refresh operator details
+        function refreshOperatorDetails() {
+            if (currentOperatorUsername) {
+                loadOperatorDetails(currentOperatorUsername);
+                updateOperatorCharts();
+            }
+        }
+
+        // Shutdown all operators
+        function shutdownAllOperators() {
+            const confirmed = confirm('Are you sure you want to shutdown all operator systems and sensors?\n\nThis will turn off all systems and sensors for all operators.');
+            
+            if (!confirmed) return;
+            
+            const operators = getOperators();
+            
+            // Shutdown all operator systems (set per-operator status) and add events
+            operators.forEach(operator => {
+                localStorage.setItem(`systemStatus_${operator.username}`, 'false');
+                localStorage.setItem(`sensorsStatus_${operator.username}`, 'false');
+                
+                // Add system events for each operator
+                addOperatorSystemEvent(operator.username, 'System turned OFF by administrator (all systems shutdown)', 'warning');
+                addOperatorSystemEvent(operator.username, 'Sensors turned OFF by administrator (all systems shutdown)', 'warning');
+            });
+            
+            // Also shutdown global status as fallback
+            localStorage.setItem('systemStatus', 'false');
+            localStorage.setItem('sensorsStatus', 'false');
+            
+            // Show success message
+            const message = document.createElement('div');
+            message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #ef4444; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 0.75rem;';
+            message.innerHTML = `
+                <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>All operator systems and sensors have been shut down</span>
+            `;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 3000);
+            
+            // Reload operators to reflect changes
+            loadOperators();
+            
+            // If viewing operator details, refresh them
+            if (currentOperatorUsername) {
+                loadOperatorDetails(currentOperatorUsername);
+                updateOperatorCharts();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOperators();
+            
+            // Refresh operator list periodically
+            setInterval(() => {
+                if (!currentOperatorUsername) {
+                    loadOperators();
+                }
+            }, 5000);
+            
+            // Refresh operator details periodically
+            setInterval(() => {
+                if (currentOperatorUsername) {
+                    loadOperatorDetails(currentOperatorUsername);
+                    updateOperatorCharts();
+                }
+            }, 5000);
+            
+            // Listen for sensor updates from other pages/tabs
+            window.addEventListener('sensorsUpdated', function() {
+                if (currentOperatorUsername) {
+                    loadOperatorSensors(currentOperatorUsername);
+                } else {
+                    loadOperators();
+                }
+            });
+            
+            // Listen for storage changes from other tabs
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'userSensors' || e.key === 'systemEvents') {
+                    if (currentOperatorUsername) {
+                        loadOperatorDetails(currentOperatorUsername);
+                    } else {
+                        loadOperators();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

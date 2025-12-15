@@ -1,0 +1,435 @@
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.9375rem 1.125rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(47, 167, 110, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+}
+
+body.login-page .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+body.login-page .checkbox-label:hover {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: var(--primary-dark);
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #1F8A54 0%, #2FA76E 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0.875rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(47, 167, 110, 0.4) !important;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login-submit::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-login-submit:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-login-submit:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 32px rgba(47, 167, 110, 0.48) !important;
+    background: linear-gradient(135deg, #1F8A54 0%, #2FA76E 100%) !important;
+}
+
+.btn-login-submit:active {
+    transform: translateY(0);
+}
+
+.btn-login-submit span {
+    position: relative;
+    z-index: 1;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.9375rem 1.125rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    font-family: inherit;
+    resize: vertical;
+    line-height: 1.5;
+    min-height: 120px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(47, 167, 110, 0.1);
+}
+
+/* Enhanced Modal */
+.modal {
+    display: none;
+    position: fixed !important;
+    z-index: 2000 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal[style*="display: block"],
+.modal[style*="display:flex"],
+.modal[style*="display: flex"],
+.modal[data-modal-open="true"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed !important;
+    z-index: 2000 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Hide profileLocation by default - only show when modal is explicitly open */
+#profileLocation {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: fixed !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    max-height: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    z-index: -1 !important;
+}
+
+/* Only show profileLocation when modal is open */
+.modal[style*="display: block"] #profileLocation,
+.modal[style*="display:flex"] #profileLocation,
+.modal[style*="display: flex"] #profileLocation,
+.modal[style*="display:block"] #profileLocation,
+.modal[data-modal-open="true"] #profileLocation,
+.modal[data-modal-open="true"] select#profileLocation,
+.modal[data-modal-open="true"] .form-group #profileLocation {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    pointer-events: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+    max-height: none !important;
+    max-width: none !important;
+    padding: 0.875rem 1rem !important;
+    margin: 0 !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 0.5rem !important;
+    font-size: 1rem !important;
+    background: white !important;
+    cursor: pointer !important;
+    z-index: auto !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+    margin: 2rem auto;
+    padding: 0;
+    border-radius: 1.25rem;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(47, 167, 110, 0.1);
+    animation: slideDown 0.3s ease;
+    border: 1px solid rgba(47, 167, 110, 0.15);
+    position: relative;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--bg-gradient);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid rgba(47, 167, 110, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(47, 167, 110, 0.05) 0%, rgba(47, 167, 110, 0.02) 100%);
+}
+
+.modal-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    background: var(--bg-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.close {
+    color: var(--text-secondary);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.close:hover,
+.close:focus {
+    color: var(--primary-color);
+    background: rgba(47, 167, 110, 0.1);
+    transform: rotate(90deg);
+}
+
+.modal-form {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(47, 167, 110, 0.1);
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.9375rem 1.125rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.625rem;
+    font-size: 0.9375rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    font-family: inherit;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(47, 167, 110, 0.1);
+}
+
+/* Ensure select elements are only visible inside open modals */
+.modal:not([style*="display: block"]):not([style*="display:flex"]):not([style*="display: flex"]) #profileLocation,
+.modal:not([style*="display: block"]):not([style*="display:flex"]):not([style*="display: flex"]) select#profileLocation,
+.modal:not([style*="display: block"]):not([style*="display:flex"]):not([style*="display: flex"]) .form-group #profileLocation,
+.modal[style*="display: none"] #profileLocation,
+.modal[style*="display: none"] select#profileLocation,
+.modal[style*="display: none"] .form-group #profileLocation {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Hide any profileLocation select that's outside the modal */
+body > select#profileLocation,
+main > select#profileLocation,
+.dashboard-container > select#profileLocation,
+.dashboard-main > select#profileLocation,
+body > .form-group > select#profileLocation,
+main > .form-group > select#profileLocation,
+.dashboard-container > .form-group > select#profileLocation,
+.dashboard-main > .form-group > select#profileLocation {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Aggressive hiding of profileLocation when modal is closed - catch all cases */
+#profileLocation:not(.modal[style*="display: block"] #profileLocation):not(.modal[style*="display:flex"] #profileLocation):not(.modal[style*="display: flex"] #profileLocation),
+select#profileLocation:not(.modal[style*="display: block"] select#profileLocation):not(.modal[style*="display:flex"] select#profileLocation):not(.modal[style*="display: flex"] select#profileLocation) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    max-height: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+/* Only show profileLocation when modal is open */
+.modal[style*="display: block"] #profileLocation,
+.modal[style*="display: block"] select#profileLocation,
+.modal[style*="display: block"] .form-group #profileLocation,
+.modal[style*="display:flex"] #profileLocation,
+.modal[style*="display:flex"] select#profileLocation,
+.modal[style*="display:flex"] .form-group #profileLocation,
+.modal[style*="display: flex"] #profileLocation,
+.modal[style*="display: flex"] select#profileLocation,
+.modal[style*="display: flex"] .form-group #profileLocation {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    left: auto !important;
+    height: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin: 0 0.25rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-icon:hover {
+    transform: scale(1.2);
+}
+
+

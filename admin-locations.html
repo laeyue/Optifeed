@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Locations - Admin</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="16" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="12" cy="14" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="6" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <path d="M12 4L14 6L18 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+                        <path d="M4 20C4 20 6 18 8 20C10 22 12 20 14 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M10 20C10 20 12 18 14 20C16 22 18 20 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>OptiFeed</h2>
+            </div>
+            <div class="sidebar-account" onclick="event.stopPropagation(); event.preventDefault(); if(typeof openProfileView === 'function') { openProfileView(); } return false;">
+                <div class="account-avatar" id="accountAvatar">A</div>
+                <div class="account-info">
+                    <div class="account-name" id="accountName">Administrator</div>
+                    <div class="account-username" id="accountUsername">@username</div>
+                </div>
+                <div class="account-role" id="accountRole">Administrator</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-dashboard.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-records.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Pellet Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-users.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-monitoring.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Operator Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-locations.html" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Setup Locations</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <div class="page-header" style="margin-bottom: 2rem;">
+                <div class="header-content" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div class="header-title-section">
+                        <h1 style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.75rem; font-weight: 700; color: #1e293b; margin: 0;">
+                            <svg style="width: 28px; height: 28px; color: #2FA76E;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Setup Locations
+                        </h1>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9375rem; color: #64748b;">View all user setup locations and their status</p>
+                    </div>
+                    <button class="btn-primary" onclick="openAddLocationModal()" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; font-size: 0.9375rem; font-weight: 600;">
+                        <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Add Location
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="locations-stats-bar" id="locationsStatsBar">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #ecfdf5;">
+                        <svg style="color: #10b981;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalLocationsCount">-</div>
+                        <div class="stat-label">Total Locations</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fef3c7;">
+                        <svg style="color: #f59e0b;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalUsersCount">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e0e7ff;">
+                        <svg style="color: #6366f1;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalRecordsCount">-</div>
+                        <div class="stat-label">Total Records</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f0f9ff;">
+                        <svg style="color: #0ea5e9;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalSensorsCount">-</div>
+                        <div class="stat-label">Total Sensors</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="locations-toolbar">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <input type="text" id="locationSearchInput" placeholder="Search locations by name..." oninput="filterLocations()">
+                </div>
+                <div class="toolbar-actions">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all" onclick="setLocationFilter('all')">All</button>
+                        <button class="filter-tab" data-filter="active" onclick="setLocationFilter('active')">Active</button>
+                        <button class="filter-tab" data-filter="inactive" onclick="setLocationFilter('inactive')">Inactive</button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-toggle-btn active" data-view="grid" onclick="setLocationView('grid')" title="Grid View">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <button class="view-toggle-btn" data-view="list" onclick="setLocationView('list')" title="List View">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 6H21M8 12H21M8 18H21M3 6H3.01M3 12H3.01M3 18H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locations List -->
+            <div class="locations-section">
+                <div class="locations-grid-enhanced" id="locationsGrid">
+                    <!-- Locations will be populated here -->
+                </div>
+            </div>
+            
+            <style>
+                /* Enhanced Locations Management Styles */
+                .locations-stats-bar {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 1.25rem;
+                    margin-bottom: 2rem;
+                }
+                .stat-card {
+                    background: white;
+                    border-radius: 0.875rem;
+                    padding: 1.5rem;
+                    border: 1px solid #e2e8f0;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    transition: all 0.2s ease;
+                }
+                .stat-card:hover {
+                    border-color: #2FA76E;
+                    box-shadow: 0 4px 12px rgba(47, 167, 110, 0.1);
+                }
+                .stat-card .stat-icon {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+                .stat-card .stat-icon svg {
+                    width: 24px;
+                    height: 24px;
+                }
+                .stat-card .stat-content {
+                    flex: 1;
+                }
+                .stat-card .stat-value {
+                    font-size: 1.75rem;
+                    font-weight: 700;
+                    color: #1e293b;
+                    line-height: 1.2;
+                }
+                .stat-card .stat-label {
+                    font-size: 0.8125rem;
+                    color: #64748b;
+                    font-weight: 500;
+                }
+
+                /* Search and Filter Bar */
+                .locations-toolbar {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
+                    padding: 1rem 1.25rem;
+                    background: #f8fafc;
+                    border-radius: 0.75rem;
+                    border: 1px solid #e2e8f0;
+                }
+                .search-box {
+                    flex: 1;
+                    position: relative;
+                }
+                .search-box input {
+                    width: 100%;
+                    padding: 0.75rem 1rem 0.75rem 2.75rem;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 0.5rem;
+                    font-size: 0.9375rem;
+                    background: white;
+                    transition: all 0.2s ease;
+                }
+                .search-box input:focus {
+                    outline: none;
+                    border-color: #2FA76E;
+                    box-shadow: 0 0 0 3px rgba(47, 167, 110, 0.1);
+                }
+                .search-box svg {
+                    position: absolute;
+                    left: 0.875rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 18px;
+                    height: 18px;
+                    color: #94a3b8;
+                }
+                .toolbar-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                }
+                .filter-tabs {
+                    display: flex;
+                    gap: 0.5rem;
+                }
+                .filter-tab {
+                    padding: 0.625rem 1rem;
+                    border-radius: 0.5rem;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .filter-tab:hover {
+                    border-color: #2FA76E;
+                    color: #2FA76E;
+                }
+                .filter-tab.active {
+                    background: #2FA76E;
+                    border-color: #2FA76E;
+                    color: white;
+                }
+                .view-toggle {
+                    display: flex;
+                    gap: 0.25rem;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 0.5rem;
+                    padding: 0.25rem;
+                }
+                .view-toggle-btn {
+                    padding: 0.5rem;
+                    border-radius: 0.375rem;
+                    background: transparent;
+                    border: none;
+                    color: #64748b;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .view-toggle-btn svg {
+                    width: 18px;
+                    height: 18px;
+                }
+                .view-toggle-btn:hover {
+                    background: #f1f5f9;
+                    color: #2FA76E;
+                }
+                .view-toggle-btn.active {
+                    background: #2FA76E;
+                    color: white;
+                }
+                .view-toggle-btn.active:hover {
+                    background: #259c5f;
+                }
+
+                /* Enhanced Locations Section */
+                .locations-section {
+                    margin-bottom: 2.5rem;
+                }
+                .locations-grid-enhanced {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+                    gap: 1.25rem;
+                }
+                .location-card-enhanced {
+                    background: white;
+                    border-radius: 1rem;
+                    border: 1px solid #e2e8f0;
+                    overflow: hidden;
+                    transition: all 0.2s ease;
+                }
+                .location-card-enhanced:hover {
+                    border-color: #2FA76E;
+                    box-shadow: 0 8px 24px rgba(47, 167, 110, 0.12);
+                    transform: translateY(-2px);
+                }
+                .location-card-header-enhanced {
+                    display: flex;
+                    align-items: center;
+                    padding: 1.25rem;
+                    gap: 1rem;
+                    border-bottom: 1px solid #f1f5f9;
+                }
+                .location-icon-enhanced {
+                    width: 52px;
+                    height: 52px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%);
+                    color: white;
+                }
+                .location-icon-enhanced svg {
+                    width: 24px;
+                    height: 24px;
+                    stroke: white;
+                }
+                .location-info-enhanced {
+                    flex: 1;
+                    min-width: 0;
+                }
+                .location-info-enhanced h4 {
+                    margin: 0;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    color: #1e293b;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .location-info-enhanced .location-type {
+                    font-size: 0.8125rem;
+                    color: #64748b;
+                    margin-top: 0.125rem;
+                }
+                .location-status-badge {
+                    padding: 0.25rem 0.625rem;
+                    border-radius: 0.375rem;
+                    font-size: 0.6875rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3px;
+                }
+                .location-status-badge.active {
+                    background: #ecfdf5;
+                    color: #059669;
+                }
+                .location-status-badge.inactive {
+                    background: #f1f5f9;
+                    color: #64748b;
+                }
+                .location-card-body-enhanced {
+                    padding: 1.25rem;
+                }
+                .location-stats-section {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 0.75rem;
+                    margin-bottom: 1rem;
+                }
+                .location-stat-item {
+                    text-align: center;
+                    padding: 0.75rem 0.5rem;
+                    background: #f8fafc;
+                    border-radius: 0.5rem;
+                    transition: all 0.2s ease;
+                }
+                .location-stat-item:hover {
+                    background: #f1f5f9;
+                    transform: translateY(-1px);
+                }
+                .location-stat-item .value {
+                    font-size: 1.125rem;
+                    font-weight: 700;
+                    color: #1e293b;
+                }
+                .location-stat-item .label {
+                    font-size: 0.6875rem;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3px;
+                    margin-top: 0.125rem;
+                }
+                .location-description {
+                    font-size: 0.8125rem;
+                    color: #64748b;
+                    margin-top: 0.5rem;
+                    padding: 0.75rem;
+                    background: #f8fafc;
+                    border-radius: 0.5rem;
+                    border-left: 3px solid #2FA76E;
+                }
+                .location-card-footer-enhanced {
+                    display: flex;
+                    gap: 0.5rem;
+                    padding: 1rem 1.25rem;
+                    background: #f8fafc;
+                    border-top: 1px solid #f1f5f9;
+                }
+                .location-card-footer-enhanced button {
+                    flex: 1;
+                    padding: 0.625rem 0.75rem;
+                    border-radius: 0.5rem;
+                    font-size: 0.8125rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.375rem;
+                    border: none;
+                }
+                .location-card-footer-enhanced button svg {
+                    width: 14px;
+                    height: 14px;
+                }
+                .btn-view-location {
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                }
+                .btn-view-location:hover {
+                    border-color: #2FA76E;
+                    color: #2FA76E;
+                    background: #f0fdf4;
+                }
+                .btn-edit-location {
+                    background: #2FA76E;
+                    border: 1px solid #2FA76E;
+                    color: white;
+                }
+                .btn-edit-location:hover {
+                    background: #259c5f;
+                    border-color: #259c5f;
+                }
+                .btn-delete-location {
+                    background: #ef4444;
+                    border: 1px solid #ef4444;
+                    color: white;
+                }
+                .btn-delete-location:hover {
+                    background: #dc2626;
+                    border-color: #dc2626;
+                }
+                /* List View Styles */
+                .locations-grid-enhanced.list-view {
+                    grid-template-columns: 1fr;
+                }
+                .locations-grid-enhanced.list-view .location-card-enhanced {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: stretch;
+                }
+                .locations-grid-enhanced.list-view .location-card-header-enhanced {
+                    flex: 0 0 300px;
+                    border-right: 1px solid #f1f5f9;
+                    border-bottom: none;
+                }
+                .locations-grid-enhanced.list-view .location-card-body-enhanced {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .locations-grid-enhanced.list-view .location-stats-section {
+                    grid-template-columns: repeat(4, 1fr);
+                }
+                .location-users-section {
+                    padding-top: 1rem;
+                    border-top: 1px solid #f1f5f9;
+                }
+                .section-divider {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0.75rem;
+                    position: relative;
+                }
+                .section-divider::before {
+                    content: '';
+                    flex: 1;
+                    height: 1px;
+                    background: #e2e8f0;
+                }
+                .divider-text {
+                    padding: 0 0.75rem;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    color: #94a3b8;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3px;
+                }
+                .location-users-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+                .location-user-item-enhanced {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    padding: 0.625rem;
+                    background: #f8fafc;
+                    border-radius: 0.5rem;
+                    transition: all 0.2s ease;
+                }
+                .location-user-item-enhanced:hover {
+                    background: #f1f5f9;
+                }
+                .user-avatar-enhanced {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.875rem;
+                    font-weight: 700;
+                    color: white;
+                    flex-shrink: 0;
+                    background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%);
+                }
+                .user-details-enhanced {
+                    flex: 1;
+                    min-width: 0;
+                }
+                .user-name-enhanced {
+                    font-size: 0.8125rem;
+                    font-weight: 600;
+                    color: #1e293b;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .user-role-badge {
+                    padding: 0.125rem 0.5rem;
+                    border-radius: 0.25rem;
+                    font-size: 0.625rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3px;
+                }
+                .user-role-badge.role-admin {
+                    background: #f3e8ff;
+                    color: #7c3aed;
+                }
+                .user-role-badge.role-operator {
+                    background: #ecfdf5;
+                    color: #059669;
+                }
+                .user-stats-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    flex-wrap: wrap;
+                    margin-top: 0.25rem;
+                }
+                .user-stat-mini {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.375rem;
+                    font-size: 0.6875rem;
+                    color: #94a3b8;
+                    font-weight: 500;
+                }
+                .user-stat-mini svg {
+                    width: 12px;
+                    height: 12px;
+                    opacity: 0.7;
+                }
+                .user-name-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin-bottom: 0.25rem;
+                    flex-wrap: wrap;
+                }
+                .no-data-container {
+                    grid-column: 1 / -1;
+                    text-align: center;
+                    padding: 4rem 2rem;
+                    background: white;
+                    border-radius: 1rem;
+                    border: 2px dashed #e2e8f0;
+                }
+                .no-data {
+                    font-size: 1rem;
+                    color: #64748b;
+                    margin: 0;
+                }
+                .no-data-container svg {
+                    width: 64px;
+                    height: 64px;
+                    color: #cbd5e1;
+                    margin-bottom: 1rem;
+                }
+
+                /* Responsive */
+                @media (max-width: 1024px) {
+                    .locations-stats-bar {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 640px) {
+                    .locations-stats-bar {
+                        grid-template-columns: 1fr;
+                    }
+                    .locations-toolbar {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .toolbar-actions {
+                        flex-direction: column;
+                        align-items: stretch;
+                    }
+                    .filter-tabs {
+                        flex-wrap: wrap;
+                    }
+                    .locations-grid-enhanced {
+                        grid-template-columns: 1fr;
+                    }
+                    .location-stats-section {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    .location-card-footer-enhanced {
+                        flex-direction: column;
+                    }
+                    .locations-grid-enhanced.list-view .location-card-enhanced {
+                        flex-direction: column;
+                    }
+                    .locations-grid-enhanced.list-view .location-card-header-enhanced {
+                        flex: 0 0 auto;
+                        border-right: none;
+                        border-bottom: 1px solid #f1f5f9;
+                    }
+                }
+            </style>
+        </div>
+    </main>
+
+    <!-- Add/Edit Location Modal -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="locationModalTitle">Add New Location</h2>
+                <span class="close" onclick="closeLocationModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveLocation();">
+                <input type="hidden" id="locationId">
+                <div class="form-group">
+                    <label for="locationName">Location Name *</label>
+                    <input type="text" id="locationName" required placeholder="e.g., Factory Floor A, Station 1">
+                </div>
+                <div class="form-group">
+                    <label for="locationDescription">Description</label>
+                    <textarea id="locationDescription" rows="3" placeholder="Optional description of the location"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="locationAddress">Address</label>
+                    <input type="text" id="locationAddress" placeholder="Physical address of the location">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeLocationModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Location</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveProfile();">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Setup Location</label>
+                    <select id="profileLocation">
+                        <option value="">Select a location</option>
+                        <option value="Factory Floor A, Station 1">Factory Floor A, Station 1</option>
+                        <option value="Factory Floor A, Station 2">Factory Floor A, Station 2</option>
+                        <option value="Factory Floor B, Station 1">Factory Floor B, Station 1</option>
+                        <option value="Factory Floor B, Station 2">Factory Floor B, Station 2</option>
+                        <option value="Factory Floor C, Station 1">Factory Floor C, Station 1</option>
+                        <option value="Main Office">Main Office</option>
+                        <option value="Quality Control Lab">Quality Control Lab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileIdNumber">ID Number</label>
+                    <input type="text" id="profileIdNumber" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
+    <script src="admin-locations-db.js"></script>
+    <script src="profile-edit.js"></script>
+</body>
+</html>
+

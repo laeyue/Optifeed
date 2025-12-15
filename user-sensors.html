@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Calibration - OptiFeed</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/user.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="16" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="12" cy="14" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="6" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <path d="M12 4L14 6L18 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+                        <path d="M4 20C4 20 6 18 8 20C10 22 12 20 14 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M10 20C10 20 12 18 14 20C16 22 18 20 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>OptiFeed</h2>
+            </div>
+            <div class="sidebar-account" onclick="event.stopPropagation(); event.preventDefault(); if(typeof openProfileView === 'function') { openProfileView(); } return false;">
+                <div class="account-avatar" id="accountAvatar">U</div>
+                <div class="account-info">
+                    <div class="account-name" id="accountName">User</div>
+                    <div class="account-username" id="accountUsername">@username</div>
+                </div>
+                <div class="account-role" id="accountRole">Factory Operator</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-dashboard.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-measurements.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Measurements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-reports.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-monitoring.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>System Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-sensors.html" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 4V8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 16V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 12H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Sensor Calibration</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <div class="page-header" style="background: linear-gradient(135deg, rgba(47, 167, 110, 0.08) 0%, rgba(78, 205, 196, 0.05) 100%); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2rem; border: 1.5px solid rgba(47, 167, 110, 0.12); box-shadow: 0 4px 16px rgba(47, 167, 110, 0.08);">
+                <div class="header-content">
+                    <h1 style="display: flex; align-items: center; gap: 1rem; margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; letter-spacing: -0.02em;">
+                        <div style="width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(47, 167, 110, 0.3);">
+                            <svg style="width: 28px; height: 28px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 3V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M3 12H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M17 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="currentColor" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        Sensor Calibration & Management
+                    </h1>
+                    <p class="header-subtitle" style="margin: 0; font-size: 1rem; color: #64748b; font-weight: 500;">Calibrate and manage your measurement sensors</p>
+                </div>
+                <button class="btn-primary" onclick="openAddSensorModal()" style="padding: 0.875rem 1.75rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(47, 167, 110, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(47, 167, 110, 0.3)'">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px;">
+                        <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Add Sensor
+                </button>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="sensors-stats-bar" id="sensorsStatsBar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <!-- Search and Filter Toolbar -->
+            <div class="sensors-toolbar" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem 1.5rem; background: white; border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); border: 1px solid rgba(47, 167, 110, 0.1);">
+                <div class="search-box" style="flex: 1; position: relative;">
+                    <svg style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: #94a3b8; pointer-events: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21L16.65 16.65"/>
+                    </svg>
+                    <input type="text" id="sensorSearch" placeholder="Search sensors by name, type, or location..." style="width: 100%; padding: 0.75rem 1rem 0.75rem 3rem; border: 2px solid rgba(47, 167, 110, 0.1); border-radius: 0.625rem; font-size: 0.9375rem; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.1)'; this.style.boxShadow='none'">
+                </div>
+                <select id="sensorFilter" style="padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.1); border-radius: 0.625rem; font-size: 0.9375rem; background: white; cursor: pointer; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.1)'">
+                    <option value="all">All Sensors</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                    <option value="camera">Camera Sensors</option>
+                    <option value="measurement">Measurement Sensors</option>
+                    <option value="temperature">Temperature Sensors</option>
+                </select>
+            </div>
+
+            <div class="sensors-grid" id="sensorsGrid">
+                <!-- Sensor cards will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Sensor Modal -->
+    <div id="sensorModal" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); align-items: center; justify-content: center;">
+        <div class="modal-content" style="max-width: 600px; width: 90%; background: white; border-radius: 1.25rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 1.75rem 2rem; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(135deg, rgba(47, 167, 110, 0.15) 0%, transparent 70%);"></div>
+                <div style="display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1;">
+                    <h2 id="sensorModalTitle" style="margin: 0; font-size: 1.5rem; font-weight: 700; color: white; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #2FA76E, #4ECDC4); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.35);">
+                            <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="9"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
+                        <span id="sensorModalTitleText">Add New Sensor</span>
+                    </h2>
+                    <button onclick="closeSensorModal()" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease; font-size: 1.5rem; line-height: 1;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&times;</button>
+                </div>
+            </div>
+            <form id="sensorForm" class="modal-form" onsubmit="event.preventDefault(); saveSensor();" style="padding: 2rem; overflow-y: auto; flex: 1;">
+                <input type="hidden" id="sensorId">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="sensorName" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Sensor Name</label>
+                    <input type="text" id="sensorName" required placeholder="e.g., Camera Sensor 1" style="width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.15); border-radius: 0.625rem; font-size: 0.9375rem; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.15)'; this.style.boxShadow='none'">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="sensorType" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Sensor Type</label>
+                    <select id="sensorType" required style="width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.15); border-radius: 0.625rem; font-size: 0.9375rem; background: white; cursor: pointer; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.15)'; this.style.boxShadow='none'">
+                        <option value="">Select sensor type</option>
+                        <option value="camera">Camera Sensor</option>
+                        <option value="measurement">Size Measurement Sensor</option>
+                        <option value="temperature">Temperature Sensor</option>
+                        <option value="motion">Motion Sensor</option>
+                        <option value="pressure">Pressure Sensor</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="sensorLocation" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Location</label>
+                    <select id="sensorLocation" style="width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.15); border-radius: 0.625rem; font-size: 0.9375rem; background: white; cursor: pointer; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.15)'; this.style.boxShadow='none'">
+                        <option value="">Select a location</option>
+                        <!-- Locations will be loaded from database dynamically -->
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="calibrationDate" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Last Calibration Date</label>
+                    <input type="date" id="calibrationDate" style="width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.15); border-radius: 0.625rem; font-size: 0.9375rem; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.15)'; this.style.boxShadow='none'">
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="calibrationNotes" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Calibration Notes <span style="color: #ef4444;">*</span></label>
+                    <textarea id="calibrationNotes" rows="3" placeholder="Enter calibration notes or adjustments made..." required style="width: 100%; padding: 0.75rem 1rem; border: 2px solid rgba(47, 167, 110, 0.15); border-radius: 0.625rem; font-size: 0.9375rem; font-family: inherit; resize: vertical; transition: all 0.2s ease;" onfocus="this.style.borderColor='rgba(47, 167, 110, 0.3)'; this.style.boxShadow='0 0 0 3px rgba(47, 167, 110, 0.1)'" onblur="this.style.borderColor='rgba(47, 167, 110, 0.15)'; this.style.boxShadow='none'"></textarea>
+                </div>
+                <div class="form-group" id="sensorStatusGroup" style="display: none; margin-bottom: 1.5rem;">
+                    <label for="sensorStatus" style="display: block; font-size: 0.875rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">Sensor Status</label>
+                    <div class="toggle-switch-container">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="sensorStatus" checked>
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label" id="sensorStatusLabel">Online</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-actions" style="display: flex; gap: 1rem; padding-top: 1.5rem; border-top: 2px solid rgba(47, 167, 110, 0.08); margin-top: auto;">
+                    <button type="button" class="btn-secondary" onclick="closeSensorModal()" style="flex: 1; padding: 0.875rem 1.5rem; border-radius: 0.625rem; font-weight: 600; font-size: 0.9375rem; border: 2px solid rgba(47, 167, 110, 0.2); background: white; color: #2FA76E; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(47, 167, 110, 0.05)'; this.style.borderColor='rgba(47, 167, 110, 0.3)'" onmouseout="this.style.background='white'; this.style.borderColor='rgba(47, 167, 110, 0.2)'">Cancel</button>
+                    <button type="submit" class="btn-primary" style="flex: 1; padding: 0.875rem 1.5rem; border-radius: 0.625rem; font-weight: 600; font-size: 0.9375rem; background: linear-gradient(135deg, #2FA76E 0%, #1F8A54 100%); color: white; border: none; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.3); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(47, 167, 110, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(47, 167, 110, 0.3)'">Save Sensor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveProfile();">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Setup Location</label>
+                    <select id="profileLocation">
+                        <option value="">Select a location</option>
+                        <!-- Locations will be loaded from database dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileIdNumber">ID Number</label>
+                    <input type="text" id="profileIdNumber" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
+    <script src="profile-edit.js"></script>
+    <script src="user-sensors.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,646 @@
+/* Responsive Design */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .monitoring-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .dashboard-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile and tablet */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+    }
+    
+    .realtime-clock-header {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .session-details-content {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .session-stats-content {
+        padding: 1.75rem 1.5rem !important;
+    }
+    
+    .session-stats-modal .session-stats-content {
+        padding: 2rem 1.75rem !important;
+    }
+    
+    .session-stats-modal .stats-grid-session {
+        gap: 1.25rem !important;
+        padding: 0 0.5rem !important;
+    }
+    
+    .session-stats-modal .stat-item-session {
+        padding: 1.75rem 1.5rem !important;
+    }
+    
+    .session-details-header {
+        grid-template-columns: 1fr;
+        padding: 0 !important;
+    }
+    
+    .session-details-info-section,
+    .session-details-stats-section,
+    .session-measurements-preview {
+        padding: 0 !important;
+    }
+    
+    .session-header-card {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        padding: 0 !important;
+    }
+    
+    .info-card {
+        padding: 1.5rem !important;
+    }
+    
+    .session-details-stats {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        padding: 0 !important;
+    }
+    
+    .stat-item-session {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .measurements-table {
+        margin: 0 !important;
+    }
+    
+    .btn-icon-wrapper {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+    }
+    .nav-menu {
+        display: none;
+    }
+
+    .nav-container {
+        padding: 1rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-stats {
+        gap: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 1.75rem;
+    }
+    
+    .section-title {
+        font-size: 2.25rem;
+    }
+    
+    .cards,
+    .services-grid,
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .cta-title {
+        font-size: 2.25rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .login-box {
+        padding: 2rem;
+    }
+
+    .cards,
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .header-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .monitoring-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .monitor-card {
+        padding: 2rem 1.75rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .monitor-card h3 {
+        font-size: 1.25rem;
+    }
+
+    .measurement-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .report-controls .date-input {
+        width: 100%;
+    }
+    
+    .report-options {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .report-card {
+        padding: 1.75rem;
+    }
+    
+    .report-card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .report-card-icon {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .report-card-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .report-card-actions {
+        flex-direction: column;
+    }
+    
+    .report-card-actions button {
+        width: 100%;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .summary-item {
+        padding: 1.25rem;
+    }
+    
+    .summary-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .summary-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .summary-value {
+        font-size: 1.375rem;
+    }
+    
+    .report-preview {
+        padding: 1.75rem;
+    }
+    
+    .report-preview h2 {
+        font-size: 1.5rem;
+    }
+
+    .session-controls {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .session-controls button,
+    .btn-session {
+        width: 100%;
+    }
+
+    .charts-section {
+        grid-template-columns: 1fr;
+        gap: 2rem !important;
+    }
+
+    .chart-card,
+    .distribution-chart {
+        padding: 2rem 1.75rem !important;
+    }
+
+    .stat-card {
+        padding: 1.25rem;
+    }
+
+    .stat-content h3 {
+        font-size: 1.75rem;
+    }
+
+    .measurement-card {
+        padding: 1.25rem;
+    }
+
+    .measurement-content h3 {
+        font-size: 1.75rem;
+    }
+
+    .btn-refresh {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .performance-metrics {
+        gap: 1.25rem;
+    }
+
+    .metric {
+        padding: 0.875rem;
+    }
+
+    .sensor-item,
+    .health-item {
+        padding: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .sensor-status,
+    .health-status {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+    }
+
+    .events-list {
+        max-height: 300px;
+    }
+
+    .event-item {
+        padding: 0.875rem 1rem;
+    }
+
+    .records-table-container {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .records-table {
+        font-size: 0.875rem;
+    }
+
+    .records-table th,
+    .records-table td {
+        padding: 0.75rem;
+    }
+
+    .action-card {
+        padding: 1.5rem;
+    }
+
+    .recent-activity {
+        padding: 1.5rem;
+    }
+
+    .control-panel,
+    .image-capture-panel {
+        padding: 1.5rem;
+    }
+    
+    .control-panel-enhanced {
+        padding: 1.75rem 1.5rem !important;
+    }
+    
+    .session-controls-enhanced {
+        padding: 0 !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .btn-session {
+        padding: 1.25rem 1.25rem !important;
+        min-width: auto !important;
+    }
+    
+    .btn-content {
+        min-width: 0 !important;
+    }
+    
+    .session-status-enhanced {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .status-section,
+    .timer-section {
+        padding: 1.5rem 1.25rem !important;
+        gap: 1.25rem !important;
+    }
+    
+    .timer-icon {
+        width: 48px !important;
+        height: 48px !important;
+    }
+    
+    .timer-text {
+        font-size: 1.75rem !important;
+    }
+    
+    .session-status-enhanced {
+        padding: 1.5rem 1.25rem !important;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .session-details-content {
+        padding: 1.25rem 1rem !important;
+    }
+    
+    .session-stats-content {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .session-stats-modal .session-stats-content {
+        padding: 1.75rem 1.25rem !important;
+    }
+    
+    .session-stats-modal .stats-grid-session {
+        gap: 1rem !important;
+        padding: 0 0.25rem !important;
+    }
+    
+    .session-stats-modal .stat-item-session {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .control-panel-enhanced,
+    .image-capture-panel {
+        padding: 1.5rem 1.25rem !important;
+    }
+    
+    .session-header-card {
+        padding: 1.25rem 1rem !important;
+    }
+    
+    .info-card {
+        padding: 1.25rem !important;
+    }
+    
+    .stat-item-session {
+        padding: 1.25rem 1rem !important;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-stats {
+        gap: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-description {
+        font-size: 1rem;
+    }
+    
+    .card,
+    .service-item,
+    .about-item {
+        padding: 2rem 1.5rem;
+    }
+    
+    .cta-title {
+        font-size: 2rem;
+    }
+    
+    .cta-description {
+        font-size: 1.125rem;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-refresh {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .monitor-card {
+        padding: 1.75rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .monitor-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .stat-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .measurement-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+    }
+
+    .metric-value {
+        font-size: 0.9rem;
+    }
+
+    .sensor-name,
+    .health-label {
+        font-size: 0.875rem;
+    }
+
+    .event-message {
+        font-size: 0.85rem;
+    }
+
+    .nav-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .user-name {
+        margin-right: 0;
+        font-size: 0.875rem;
+    }
+
+    .btn-logout {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .session-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .status-indicator-wrapper {
+        width: 100%;
+    }
+
+    .session-timer {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .chart-container {
+        height: 250px;
+        padding: 0.75rem;
+    }
+
+    .progress-bar {
+        height: 8px;
+    }
+
+    .camera-preview {
+        min-height: 250px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    .dashboard-container {
+        padding: 0.75rem;
+    }
+
+    .monitor-card,
+    .stat-card,
+    .measurement-card {
+        padding: 1rem;
+    }
+
+    .btn-session {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .dashboard-main {
+        padding-top: 70px;
+        margin-left: 0;
+    }
+
+    .hero {
+        min-height: auto;
+        padding: 4rem 2rem 2rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .sidebar,
+    .sidebar-toggle,
+    .btn-refresh,
+    .btn-logout,
+    .session-controls {
+        display: none;
+    }
+
+    .dashboard-main {
+        padding-top: 0;
+        margin-left: 0;
+    }
+
+    .monitor-card,
+    .stat-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+

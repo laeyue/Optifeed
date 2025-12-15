@@ -1,0 +1,220 @@
+/* Charts */
+.distribution-chart {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.distribution-chart::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--bg-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.distribution-chart:hover {
+    margin-top: -3px;
+    margin-bottom: 3px;
+    box-shadow: var(--shadow-lg) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.distribution-chart:hover::before {
+    transform: scaleX(1) !important;
+}
+
+.distribution-chart h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.distribution-chart h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--bg-gradient);
+    border-radius: 2px;
+}
+
+.chart-container {
+    display: block !important;
+    width: 100% !important;
+    height: 350px !important;
+    min-height: 350px !important;
+    max-height: 350px !important;
+    position: relative;
+    background: var(--bg-tertiary);
+    border-radius: 0.5rem;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+#distributionChart,
+#trendsChart,
+#recordsChart,
+#sizeDistributionChart,
+#performanceChart,
+#sensorChart,
+#operatorPerformanceChart,
+#operatorSensorChart,
+#avgSizeTrendChart,
+#userActivityChart,
+#recordsSummaryChart,
+#sizeDistributionSummaryChart,
+#operatorActivitySummaryChart,
+#avgSizeTrendSummaryChart {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 360px !important;
+    display: block !important;
+}
+
+/* ApexCharts specific - only set dimensions, don't override positioning */
+.apexcharts-canvas {
+    width: 100% !important;
+    min-height: 360px !important;
+}
+
+/* Disable transitions and animations on ApexCharts to prevent rendering issues */
+.apexcharts-canvas,
+.apexcharts-canvas * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Chart library specific styles */
+.recharts-wrapper {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.recharts-surface {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chart-card {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: visible;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chart-card > h2,
+.chart-card > .chart-header {
+    position: relative;
+}
+
+.chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--bg-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.chart-card:hover {
+    margin-top: -6px;
+    margin-bottom: 6px;
+    box-shadow: var(--shadow-xl), 0 0 40px rgba(47, 167, 110, 0.1) !important;
+    border-color: var(--primary-light);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-card:hover::before {
+    transform: scaleX(1) !important;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chart-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.chart-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.chart-card:hover .chart-icon {
+    transform: scale(1.1);
+}
+
+.chart-card h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--bg-gradient);
+    border-radius: 2px;
+}
+
+.chart-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+

@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitoring - OptiFeed</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/user.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/monitoring.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+</head>
+<body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="16" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="12" cy="14" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="6" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <path d="M12 4L14 6L18 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+                        <path d="M4 20C4 20 6 18 8 20C10 22 12 20 14 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M10 20C10 20 12 18 14 20C16 22 18 20 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>OptiFeed</h2>
+            </div>
+            <div class="sidebar-account" onclick="event.stopPropagation(); event.preventDefault(); if(typeof openProfileView === 'function') { openProfileView(); } return false;">
+                <div class="account-avatar" id="accountAvatar">U</div>
+                <div class="account-info">
+                    <div class="account-name" id="accountName">User</div>
+                    <div class="account-username" id="accountUsername">@username</div>
+                </div>
+                <div class="account-role" id="accountRole">Factory Operator</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-dashboard.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-measurements.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Measurements</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-reports.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-monitoring.html" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>System Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="user-sensors.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 4V8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12 16V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 12H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Sensor Calibration</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <div class="page-header" style="background: linear-gradient(135deg, rgba(47, 167, 110, 0.08) 0%, rgba(78, 205, 196, 0.05) 100%); border-radius: 1.25rem; padding: 2rem; margin-bottom: 2rem; border: 1.5px solid rgba(47, 167, 110, 0.12); box-shadow: 0 4px 16px rgba(47, 167, 110, 0.08);">
+                <div class="header-content">
+                    <h1 style="display: flex; align-items: center; gap: 1rem; margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; letter-spacing: -0.02em;">
+                        <div style="width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(47, 167, 110, 0.3);">
+                            <svg style="width: 28px; height: 28px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        System Performance & Sensor Status
+                    </h1>
+                    <p class="header-subtitle" style="margin: 0; font-size: 1rem; color: #64748b; font-weight: 500;">Real-time monitoring of system resources and sensor health</p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <div class="system-controls" style="display: flex; gap: 0.75rem;">
+                            <button id="systemToggle" class="btn-primary" onclick="toggleSystem()" style="padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(47, 167, 110, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(47, 167, 110, 0.3)'">
+                                <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 3H6C4.89543 3 4 3.89543 4 5V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V5C20 3.89543 19.1046 3 18 3Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span id="systemToggleText">Turn System Off</span>
+                            </button>
+                            <button id="sensorsToggle" class="btn-secondary" onclick="toggleSensors()" style="padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; border: 2px solid rgba(47, 167, 110, 0.2); background: white; color: #2FA76E; transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.background='rgba(47, 167, 110, 0.05)'; this.style.borderColor='rgba(47, 167, 110, 0.3)'" onmouseout="this.style.background='white'; this.style.borderColor='rgba(47, 167, 110, 0.2)'">
+                                <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span id="sensorsToggleText">Turn Sensors Off</span>
+                            </button>
+                        </div>
+                        <button class="btn-refresh" onclick="refreshUserMonitoring()" style="padding: 0.875rem 1.5rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(47, 167, 110, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(47, 167, 110, 0.3)'">
+                            <svg class="refresh-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14L18.36 18.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Overview Stats -->
+            <div class="monitoring-stats-bar" id="monitoringStatsBar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+
+            <div class="monitoring-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div class="monitor-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%); border: 1.5px solid rgba(47, 167, 110, 0.12); border-radius: 1.25rem; padding: 2rem; box-shadow: 0 4px 16px rgba(47, 167, 110, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; display: flex; flex-direction: column; height: auto; min-height: 500px;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 8px 24px rgba(47, 167, 110, 0.12)'; this.style.borderColor='rgba(47, 167, 110, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(47, 167, 110, 0.06)'; this.style.borderColor='rgba(47, 167, 110, 0.12)'">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);"></div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 2px solid rgba(47, 167, 110, 0.08);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                            <svg class="monitor-icon" style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="4" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M8 22H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 10L10 13L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        System Performance
+                    </h3>
+                    <div class="performance-metrics">
+                        <div class="metric">
+                            <span class="metric-label">CPU Usage</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpuProgress" style="width: 45%"></div>
+                            </div>
+                            <div class="metric-details">
+                                <span class="metric-value" id="cpuValue">45%</span>
+                                <span class="metric-extra" id="cpuTemp">Temp: 52°C</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Memory Usage</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memoryProgress" style="width: 62%"></div>
+                            </div>
+                            <div class="metric-details">
+                                <span class="metric-value" id="memoryValue">62%</span>
+                                <span class="metric-extra" id="memoryUsed">4.2 GB / 6.8 GB</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Disk Usage</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="diskProgress" style="width: 38%"></div>
+                            </div>
+                            <div class="metric-details">
+                                <span class="metric-value" id="diskValue">38%</span>
+                                <span class="metric-extra" id="diskFree">Free: 124 GB</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Network Activity</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="networkProgress" style="width: 28%"></div>
+                            </div>
+                            <div class="metric-details">
+                                <span class="metric-value" id="networkValue">28%</span>
+                                <span class="metric-extra" id="networkSpeed">↑ 2.4 MB/s ↓ 1.8 MB/s</span>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">System Load</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="loadProgress" style="width: 35%"></div>
+                            </div>
+                            <div class="metric-details">
+                                <span class="metric-value" id="loadValue">0.35</span>
+                                <span class="metric-extra" id="loadProcesses">Active: 47 processes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="monitor-card">
+                    <h3>
+                        <svg class="monitor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Sensor Status
+                    </h3>
+                    <div class="sensor-list" id="sensorList">
+                        <!-- Sensors will be populated here -->
+                    </div>
+                </div>
+
+                <div class="monitor-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%); border: 1.5px solid rgba(47, 167, 110, 0.12); border-radius: 1.25rem; padding: 2rem; box-shadow: 0 4px 16px rgba(47, 167, 110, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; display: flex; flex-direction: column; height: auto; min-height: 500px;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 8px 24px rgba(47, 167, 110, 0.12)'; this.style.borderColor='rgba(47, 167, 110, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(47, 167, 110, 0.06)'; this.style.borderColor='rgba(47, 167, 110, 0.12)'">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);"></div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 2px solid rgba(47, 167, 110, 0.08);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                            <svg class="monitor-icon" style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        System Health
+                    </h3>
+                    <div class="health-indicators">
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">Camera System</span>
+                                <span class="health-detail" id="cameraDetail">Uptime: 2d 14h • Response: 12ms</span>
+                            </div>
+                            <span class="health-status" id="userCameraStatus">Online</span>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">Measurement Engine</span>
+                                <span class="health-detail" id="measurementDetail">Uptime: 2d 14h • Response: 8ms</span>
+                            </div>
+                            <span class="health-status" id="userMeasurementStatus">Online</span>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">Database</span>
+                                <span class="health-detail" id="databaseDetail">Uptime: 2d 14h • Queries: 1,247/min</span>
+                            </div>
+                            <span class="health-status" id="userDatabaseStatus">Online</span>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">API Server</span>
+                                <span class="health-detail" id="apiDetail">Uptime: 2d 14h • Response: 15ms</span>
+                            </div>
+                            <span class="health-status" id="userApiStatus">Online</span>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">Network Gateway</span>
+                                <span class="health-detail" id="gatewayDetail">Uptime: 2d 14h • Latency: 5ms</span>
+                            </div>
+                            <span class="health-status" id="userGatewayStatus">Online</span>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-info">
+                                <span class="health-label">Data Storage</span>
+                                <span class="health-detail" id="storageDetail">Uptime: 2d 14h • I/O: 245 MB/s</span>
+                            </div>
+                            <span class="health-status" id="userStorageStatus">Online</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="monitor-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%); border: 1.5px solid rgba(47, 167, 110, 0.12); border-radius: 1.25rem; padding: 2rem; box-shadow: 0 4px 16px rgba(47, 167, 110, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; display: flex; flex-direction: column; height: auto; min-height: 500px;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 8px 24px rgba(47, 167, 110, 0.12)'; this.style.borderColor='rgba(47, 167, 110, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(47, 167, 110, 0.06)'; this.style.borderColor='rgba(47, 167, 110, 0.12)'">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);"></div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 2px solid rgba(47, 167, 110, 0.08);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                            <svg class="monitor-icon" style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        Recent System Events
+                    </h3>
+                    <div class="events-list" id="eventsList">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div class="chart-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%); border: 1.5px solid rgba(47, 167, 110, 0.12); border-radius: 1.25rem; padding: 2rem; box-shadow: 0 4px 16px rgba(47, 167, 110, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 8px 24px rgba(47, 167, 110, 0.12)'; this.style.borderColor='rgba(47, 167, 110, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(47, 167, 110, 0.06)'; this.style.borderColor='rgba(47, 167, 110, 0.12)'">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);"></div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 2px solid rgba(47, 167, 110, 0.08);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                            <svg class="chart-icon" style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 16L12 11L16 15L21 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        Performance Trends
+                    </h2>
+                    <div class="chart-container" style="min-height: 350px;">
+                        <div id="performanceChart" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+                <div class="chart-card" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(249, 251, 253, 0.98) 100%); border: 1.5px solid rgba(47, 167, 110, 0.12); border-radius: 1.25rem; padding: 2rem; box-shadow: 0 4px 16px rgba(47, 167, 110, 0.06); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 8px 24px rgba(47, 167, 110, 0.12)'; this.style.borderColor='rgba(47, 167, 110, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(47, 167, 110, 0.06)'; this.style.borderColor='rgba(47, 167, 110, 0.12)'">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #2FA76E 0%, #4ECDC4 100%);"></div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 2px solid rgba(47, 167, 110, 0.08);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #2FA76E 0%, #4ECDC4 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                            <svg class="chart-icon" style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        Sensor Activity
+                    </h2>
+                    <div class="chart-container" style="min-height: 350px;">
+                        <div id="sensorChart" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Remove any location filter button if accidentally added -->
+    <script>
+        // Remove any location filter buttons that might exist
+        // Also hide profileLocation select if it's outside the modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const locationFilterButtons = document.querySelectorAll('[class*="location-filter"], [id*="location-filter"], [class*="location-button"], [id*="location-button"]');
+            locationFilterButtons.forEach(btn => {
+                const style = window.getComputedStyle(btn);
+                if ((style.position === 'fixed' || style.position === 'absolute') && 
+                    style.bottom && style.left) {
+                    btn.remove();
+                }
+            });
+            
+            // Aggressively hide profileLocation select on page load and whenever modal closes
+            function hideProfileLocationIfNeeded() {
+                const profileLocation = document.getElementById('profileLocation');
+                const modal = document.getElementById('profileModal');
+                if (profileLocation) {
+                    const modalDisplay = modal ? window.getComputedStyle(modal).display : 'none';
+                    const isModalOpen = modalDisplay === 'block';
+                    const isInsideModal = modal && modal.contains(profileLocation);
+                    
+                    // Always hide if modal is closed, or if select is outside modal
+                    if (!isModalOpen || !isInsideModal) {
+                        profileLocation.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important; position: absolute !important; left: -9999px !important; pointer-events: none !important; height: 0 !important; width: 0 !important; overflow: hidden !important; max-height: 0 !important; max-width: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important;';
+                    }
+                }
+            }
+            
+            // Hide immediately and on page load
+            hideProfileLocationIfNeeded();
+            setTimeout(hideProfileLocationIfNeeded, 50);
+            setTimeout(hideProfileLocationIfNeeded, 100);
+            setTimeout(hideProfileLocationIfNeeded, 300);
+            
+            // Also hide whenever modal closes
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                // Set initial state
+                modal.style.display = 'none';
+                
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                            hideProfileLocationIfNeeded();
+                        }
+                    });
+                });
+                observer.observe(modal, { attributes: true, attributeFilter: ['style'] });
+                
+                // Also check periodically
+                setInterval(hideProfileLocationIfNeeded, 500);
+            }
+        });
+    </script>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveProfile();">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Setup Location</label>
+                    <select id="profileLocation">
+                        <option value="">Select a location</option>
+                        <option value="Factory Floor A, Station 1">Factory Floor A, Station 1</option>
+                        <option value="Factory Floor A, Station 2">Factory Floor A, Station 2</option>
+                        <option value="Factory Floor B, Station 1">Factory Floor B, Station 1</option>
+                        <option value="Factory Floor B, Station 2">Factory Floor B, Station 2</option>
+                        <option value="Factory Floor C, Station 1">Factory Floor C, Station 1</option>
+                        <option value="Main Office">Main Office</option>
+                        <option value="Quality Control Lab">Quality Control Lab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileIdNumber">ID Number</label>
+                    <input type="text" id="profileIdNumber" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
+    <script src="profile-edit.js"></script>
+    <script src="monitoring-charts.js?v=19" defer></script>
+    <script>
+        // User monitoring functions
+        function refreshUserMonitoring() {
+            const refreshBtn = document.querySelector('.btn-refresh');
+            if (refreshBtn) {
+                refreshBtn.classList.add('loading');
+                refreshBtn.disabled = true;
+                
+                setTimeout(() => {
+                    loadUserMonitoringData();
+                    refreshBtn.classList.remove('loading');
+                    refreshBtn.disabled = false;
+                }, 500);
+            } else {
+                loadUserMonitoringData();
+            }
+        }
+
+        function loadUserMonitoringData() {
+            updateUserPerformanceMetrics();
+            loadUserSensorStatus();
+            loadUserSystemHealth();
+            loadUserSystemEvents();
+            // Update stats after a short delay to ensure DOM is updated
+            setTimeout(() => {
+                updateMonitoringStats();
+            }, 300);
+        }
+
+        function updateMonitoringStats() {
+            const statsBar = document.getElementById('monitoringStatsBar');
+            if (!statsBar) return;
+            
+            const systemStatus = getCurrentSystemStatus();
+            const sensorsStatus = getCurrentSensorsStatus();
+            
+            // Get sensor count (from sensor list if available)
+            const sensorList = document.getElementById('sensorList');
+            const sensorCount = sensorList ? sensorList.querySelectorAll('.sensor-item').length : 0;
+            const onlineSensors = sensorList ? sensorList.querySelectorAll('.sensor-item .status-online').length : 0;
+            
+            // Get health status counts
+            const healthItems = document.querySelectorAll('.health-item');
+            const onlineHealth = Array.from(healthItems).filter(item => {
+                const status = item.querySelector('.health-status');
+                return status && status.textContent.trim().toLowerCase() === 'online';
+            }).length;
+            
+            statsBar.innerHTML = `
+                <div style="background: linear-gradient(135deg, rgba(47, 167, 110, 0.08) 0%, rgba(47, 167, 110, 0.03) 100%); border: 1.5px solid rgba(47, 167, 110, 0.15); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(47, 167, 110, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #2FA76E 0%, #1F8A54 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);">
+                        <svg style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="14" rx="2"/>
+                            <path d="M8 22H16"/>
+                            <path d="M12 18V22"/>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; line-height: 1.2;">${systemStatus ? 'ON' : 'OFF'}</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b; font-weight: 500;">System Status</p>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.03) 100%); border: 1.5px solid rgba(16, 185, 129, 0.15); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(16, 185, 129, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+                        <svg style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                            <path d="M2 17L12 22L22 17"/>
+                            <path d="M2 12L12 17L22 12"/>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; line-height: 1.2;">${sensorsStatus ? onlineSensors : 0}/${sensorCount}</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b; font-weight: 500;">Sensors Online</p>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.03) 100%); border: 1.5px solid rgba(59, 130, 246, 0.15); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);">
+                        <svg style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"/>
+                            <path d="M22 4L12 14.01L9 11.01"/>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; line-height: 1.2;">${onlineHealth}/${healthItems.length}</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b; font-weight: 500;">Services Healthy</p>
+                </div>
+                <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(139, 92, 246, 0.03) 100%); border: 1.5px solid rgba(139, 92, 246, 0.15); border-radius: 1rem; padding: 1.5rem; text-align: center; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(139, 92, 246, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);">
+                        <svg style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z"/>
+                            <path d="M12 6V12L16 14"/>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 700; color: #1e293b; line-height: 1.2;" id="uptimeStat">--</h3>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b; font-weight: 500;">System Uptime</p>
+                </div>
+            `;
+            
+            // Update uptime (simulated)
+            const uptimeDays = Math.floor(Math.random() * 3) + 1;
+            const uptimeHours = Math.floor(Math.random() * 24);
+            const uptimeElement = document.getElementById('uptimeStat');
+            if (uptimeElement) {
+                uptimeElement.textContent = `${uptimeDays}d ${uptimeHours}h`;
+            }
+        }
+
+        function updateUserPerformanceMetrics() {
+            const systemStatus = getCurrentSystemStatus();
+            
+            if (!systemStatus) {
+                // System is off, show 0% for all metrics
+                document.getElementById('cpuProgress').style.width = '0%';
+                document.getElementById('cpuValue').textContent = '0%';
+                if (document.getElementById('cpuTemp')) document.getElementById('cpuTemp').textContent = 'Temp: --°C';
+                document.getElementById('memoryProgress').style.width = '0%';
+                document.getElementById('memoryValue').textContent = '0%';
+                if (document.getElementById('memoryUsed')) document.getElementById('memoryUsed').textContent = '0 GB / 0 GB';
+                document.getElementById('diskProgress').style.width = '0%';
+                document.getElementById('diskValue').textContent = '0%';
+                if (document.getElementById('diskFree')) document.getElementById('diskFree').textContent = 'Free: -- GB';
+                document.getElementById('networkProgress').style.width = '0%';
+                document.getElementById('networkValue').textContent = '0%';
+                if (document.getElementById('networkSpeed')) document.getElementById('networkSpeed').textContent = '↑ 0 MB/s ↓ 0 MB/s';
+                if (document.getElementById('loadProgress')) {
+                    document.getElementById('loadProgress').style.width = '0%';
+                    document.getElementById('loadValue').textContent = '0.00';
+                    document.getElementById('loadProcesses').textContent = 'Active: 0 processes';
+                }
+                return;
+            }
+            
+            // Simulate performance metrics
+            const cpu = Math.floor(Math.random() * 30) + 30;
+            const memory = Math.floor(Math.random() * 30) + 50;
+            const disk = Math.floor(Math.random() * 20) + 30;
+            const network = Math.floor(Math.random() * 20) + 20;
+            const load = Math.random() * 0.5 + 0.2;
+
+            document.getElementById('cpuProgress').style.width = cpu + '%';
+            document.getElementById('cpuValue').textContent = cpu + '%';
+            if (document.getElementById('cpuTemp')) {
+                const temp = Math.floor(Math.random() * 15) + 45;
+                document.getElementById('cpuTemp').textContent = `Temp: ${temp}°C`;
+            }
+            
+            document.getElementById('memoryProgress').style.width = memory + '%';
+            document.getElementById('memoryValue').textContent = memory + '%';
+            if (document.getElementById('memoryUsed')) {
+                const totalGB = 6.8;
+                const usedGB = (totalGB * memory / 100).toFixed(1);
+                document.getElementById('memoryUsed').textContent = `${usedGB} GB / ${totalGB} GB`;
+            }
+            
+            document.getElementById('diskProgress').style.width = disk + '%';
+            document.getElementById('diskValue').textContent = disk + '%';
+            if (document.getElementById('diskFree')) {
+                const freeGB = Math.floor(Math.random() * 50) + 100;
+                document.getElementById('diskFree').textContent = `Free: ${freeGB} GB`;
+            }
+            
+            document.getElementById('networkProgress').style.width = network + '%';
+            document.getElementById('networkValue').textContent = network + '%';
+            if (document.getElementById('networkSpeed')) {
+                const upSpeed = (Math.random() * 2 + 1.5).toFixed(1);
+                const downSpeed = (Math.random() * 2 + 1.2).toFixed(1);
+                document.getElementById('networkSpeed').textContent = `↑ ${upSpeed} MB/s ↓ ${downSpeed} MB/s`;
+            }
+            
+            if (document.getElementById('loadProgress')) {
+                const loadPercent = Math.floor(load * 100);
+                document.getElementById('loadProgress').style.width = loadPercent + '%';
+                document.getElementById('loadValue').textContent = load.toFixed(2);
+                const processes = Math.floor(Math.random() * 20) + 40;
+                document.getElementById('loadProcesses').textContent = `Active: ${processes} processes`;
+            }
+        }
+
+        async function loadUserSensorStatus() {
+            // Always get fresh sensorsStatus from localStorage
+            const currentSensorsStatus = getCurrentSensorsStatus();
+            const globalStatus = currentSensorsStatus ? 'online' : 'offline';
+            
+            // Load user sensors from API
+            let userSensors = [];
+            try {
+                const response = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS, {
+                    method: 'GET'
+                });
+                userSensors = response.sensors || [];
+            } catch (error) {
+                console.error('Failed to load sensors:', error);
+            }
+            
+            const sensorList = document.getElementById('sensorList');
+            if (sensorList) {
+                if (userSensors.length === 0) {
+                    // Show message when no sensors are added
+                    sensorList.innerHTML = `
+                        <div class="no-sensors-message" style="text-align: center; padding: 3rem 2rem; color: var(--text-secondary);">
+                            <svg style="width: 64px; height: 64px; margin: 0 auto 1rem; opacity: 0.5;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <p style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">No Sensors Added</p>
+                            <p style="font-size: 0.875rem; margin-bottom: 1.5rem;">Add sensors in the Sensor Calibration page to see them here</p>
+                            <a href="user-sensors.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; background: var(--primary-color); color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                                <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Add Sensor
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    // Display user sensors
+                    sensorList.innerHTML = userSensors.map(sensor => {
+                        // Calculate time since last update (simulate based on creation time)
+                        const createdAt = new Date(sensor.created_at || sensor.createdAt || Date.now());
+                        const now = new Date();
+                        const diffSeconds = Math.floor((now - createdAt) / 1000);
+                        let lastUpdate = '';
+                        
+                        if (diffSeconds < 60) {
+                            lastUpdate = `${diffSeconds}s ago`;
+                        } else if (diffSeconds < 3600) {
+                            lastUpdate = `${Math.floor(diffSeconds / 60)}m ago`;
+                        } else if (diffSeconds < 86400) {
+                            lastUpdate = `${Math.floor(diffSeconds / 3600)}h ago`;
+                        } else {
+                            lastUpdate = `${Math.floor(diffSeconds / 86400)}d ago`;
+                        }
+                        
+                        // Use individual sensor status, respecting global toggle
+                        // If global toggle is off, show offline regardless of individual status
+                        // If global toggle is on, use individual sensor status
+                        let sensorStatus;
+                        if (!currentSensorsStatus) {
+                            // Global toggle is off, all sensors show as offline
+                            sensorStatus = 'offline';
+                        } else {
+                            // Global toggle is on, use individual sensor status
+                            sensorStatus = sensor.status || 'online';
+                        }
+                        
+                        // Format sensor type for display
+                        const typeMap = {
+                            'camera': 'Camera Sensor',
+                            'measurement': 'Size Measurement Sensor',
+                            'temperature': 'Temperature Sensor',
+                            'motion': 'Motion Sensor',
+                            'pressure': 'Pressure Sensor'
+                        };
+                        const sensorType = sensor.sensor_type || sensor.type;
+                        const sensorLocation = sensor.location_name || sensor.location;
+                        const calibrationDate = sensor.calibration_date || sensor.calibrationDate;
+                        const displayName = sensor.name || typeMap[sensorType] || 'Unknown Sensor';
+                        const displayType = typeMap[sensorType] || sensorType || 'Unknown';
+                        
+                        // Format calibration date
+                        let calibrationInfo = '';
+                        if (calibrationDate) {
+                            const calDate = new Date(calibrationDate);
+                            const daysSinceCal = Math.floor((now - calDate) / (1000 * 60 * 60 * 24));
+                            if (daysSinceCal === 0) {
+                                calibrationInfo = 'Calibrated today';
+                            } else if (daysSinceCal === 1) {
+                                calibrationInfo = 'Calibrated yesterday';
+                            } else if (daysSinceCal < 30) {
+                                calibrationInfo = `Calibrated ${daysSinceCal} days ago`;
+                            } else {
+                                calibrationInfo = `Calibrated ${calDate.toLocaleDateString()}`;
+                            }
+                        } else {
+                            calibrationInfo = 'Not calibrated';
+                        }
+                        
+                        return `
+                            <div class="sensor-item">
+                                <div class="sensor-info">
+                                    <div class="sensor-header">
+                                        <span class="sensor-name">${displayName}</span>
+                                        <span class="sensor-status status-${sensorStatus}">${sensorStatus}</span>
+                                    </div>
+                                    <div class="sensor-details">
+                                        <span class="sensor-detail-item">
+                                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            ${displayType}
+                                        </span>
+                                        ${sensorLocation ? `
+                                        <span class="sensor-detail-item">
+                                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
+                                                <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                            </svg>
+                                            ${sensorLocation}
+                                        </span>
+                                        ` : ''}
+                                        <span class="sensor-detail-item">
+                                            <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            ${calibrationInfo}
+                                        </span>
+                                        <span class="sensor-update">Updated ${lastUpdate}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        function loadUserSystemHealth() {
+            const systemStatus = getCurrentSystemStatus();
+            const healthStatuses = [
+                { id: 'userCameraStatus', detailId: 'cameraDetail', name: 'Camera System' },
+                { id: 'userMeasurementStatus', detailId: 'measurementDetail', name: 'Measurement Engine' },
+                { id: 'userDatabaseStatus', detailId: 'databaseDetail', name: 'Database' },
+                { id: 'userApiStatus', detailId: 'apiDetail', name: 'API Server' },
+                { id: 'userGatewayStatus', detailId: 'gatewayDetail', name: 'Network Gateway' },
+                { id: 'userStorageStatus', detailId: 'storageDetail', name: 'Data Storage' }
+            ];
+            
+            // Calculate uptime (simulated)
+            const days = 2;
+            const hours = 14;
+            const uptimeText = `Uptime: ${days}d ${hours}h`;
+            
+            healthStatuses.forEach(({ id, detailId, name }) => {
+                const statusElement = document.getElementById(id);
+                const detailElement = document.getElementById(detailId);
+                
+                if (statusElement) {
+                    if (systemStatus) {
+                        statusElement.className = 'health-status status-online';
+                        statusElement.textContent = 'Online';
+                    } else {
+                        statusElement.className = 'health-status status-offline';
+                        statusElement.textContent = 'Offline';
+                    }
+                }
+                
+                if (detailElement && systemStatus) {
+                    let detailText = uptimeText;
+                    if (name === 'Camera System') {
+                        const response = Math.floor(Math.random() * 10) + 8;
+                        detailText += ` • Response: ${response}ms`;
+                    } else if (name === 'Measurement Engine') {
+                        const response = Math.floor(Math.random() * 8) + 5;
+                        detailText += ` • Response: ${response}ms`;
+                    } else if (name === 'Database') {
+                        const queries = Math.floor(Math.random() * 500) + 1000;
+                        detailText += ` • Queries: ${queries.toLocaleString()}/min`;
+                    } else if (name === 'API Server') {
+                        const response = Math.floor(Math.random() * 10) + 10;
+                        detailText += ` • Response: ${response}ms`;
+                    } else if (name === 'Network Gateway') {
+                        const latency = Math.floor(Math.random() * 5) + 3;
+                        detailText += ` • Latency: ${latency}ms`;
+                    } else if (name === 'Data Storage') {
+                        const io = Math.floor(Math.random() * 100) + 200;
+                        detailText += ` • I/O: ${io} MB/s`;
+                    }
+                    detailElement.textContent = detailText;
+                } else if (detailElement) {
+                    detailElement.textContent = 'System Offline';
+                }
+            });
+        }
+
+        function loadUserSystemEvents() {
+            const allEvents = JSON.parse(localStorage.getItem('systemEvents') || '[]');
+            const currentUser = getCurrentUser();
+            
+            // Filter events by current user
+            const userEvents = currentUser ? allEvents.filter(event => event.username === currentUser.username) : [];
+            
+            const defaultEvents = currentUser ? [
+                { time: '2 minutes ago', message: 'Measurement session started', type: 'info', timestamp: new Date(Date.now() - 120000).toISOString(), username: currentUser.username },
+                { time: '5 minutes ago', message: 'New record added', type: 'success', timestamp: new Date(Date.now() - 300000).toISOString(), username: currentUser.username },
+                { time: '10 minutes ago', message: 'System check completed', type: 'info', timestamp: new Date(Date.now() - 600000).toISOString(), username: currentUser.username }
+            ] : [];
+            
+            const events = userEvents.length > 0 ? userEvents : defaultEvents;
+            events.sort((a, b) => {
+                const timeA = new Date(a.timestamp || 0);
+                const timeB = new Date(b.timestamp || 0);
+                return timeB - timeA;
+            });
+
+            const eventsList = document.getElementById('eventsList');
+            if (eventsList) {
+                if (events.length === 0) {
+                    eventsList.innerHTML = '<p class="no-data">No recent events</p>';
+                    return;
+                }
+                
+                eventsList.innerHTML = events.slice(0, 10).map(event => {
+                    const timeText = event.time || getTimeAgo(event.timestamp);
+                    return `
+                        <div class="event-item event-${event.type}">
+                            <span class="event-time">${timeText}</span>
+                            <span class="event-message">${event.message}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function getTimeAgo(timestamp) {
+            if (!timestamp) return 'Unknown';
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = Math.floor((now - time) / 1000);
+            
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+            return `${Math.floor(diff / 86400)} days ago`;
+        }
+
+        // System and sensor toggle functions
+        // Check for per-operator status first, then fall back to global
+        function getCurrentSystemStatus() {
+            const currentUser = getCurrentUser();
+            if (currentUser && currentUser.username) {
+                const operatorStatus = localStorage.getItem(`systemStatus_${currentUser.username}`);
+                if (operatorStatus !== null) {
+                    return operatorStatus !== 'false';
+                }
+            }
+            return localStorage.getItem('systemStatus') !== 'false';
+        }
+        
+        function getCurrentSensorsStatus() {
+            const currentUser = getCurrentUser();
+            if (currentUser && currentUser.username) {
+                const operatorStatus = localStorage.getItem(`sensorsStatus_${currentUser.username}`);
+                if (operatorStatus !== null) {
+                    return operatorStatus !== 'false';
+                }
+            }
+            return localStorage.getItem('sensorsStatus') !== 'false';
+        }
+        
+        let systemStatus = getCurrentSystemStatus();
+        let sensorsStatus = getCurrentSensorsStatus();
+
+        function toggleSystem() {
+            const currentUser = getCurrentUser();
+            systemStatus = !systemStatus;
+            const btn = document.getElementById('systemToggle');
+            const text = document.getElementById('systemToggleText');
+            
+            // Update per-operator status if user is logged in, otherwise global
+            if (currentUser && currentUser.username) {
+                localStorage.setItem(`systemStatus_${currentUser.username}`, systemStatus.toString());
+            } else {
+                localStorage.setItem('systemStatus', systemStatus.toString());
+            }
+            
+            if (systemStatus) {
+                btn.className = 'btn-primary';
+                text.textContent = 'Turn System Off';
+                updateUserSystemHealth(true);
+                updateUserPerformanceMetrics();
+                addUserSystemEvent('System turned ON', 'success');
+            } else {
+                btn.className = 'btn-danger';
+                text.textContent = 'Turn System On';
+                updateUserSystemHealth(false);
+                updateUserPerformanceMetrics();
+                addUserSystemEvent('System turned OFF', 'warning');
+            }
+            
+            // Update charts if available
+            if (typeof window.updatePerformanceChart === 'function') {
+                window.updatePerformanceChart(systemStatus);
+            }
+        }
+
+        async function toggleSensors() {
+            const currentUser = getCurrentUser();
+            sensorsStatus = !sensorsStatus;
+            const btn = document.getElementById('sensorsToggle');
+            const text = document.getElementById('sensorsToggleText');
+            
+            // Update per-operator status if user is logged in, otherwise global
+            if (currentUser && currentUser.username) {
+                localStorage.setItem(`sensorsStatus_${currentUser.username}`, sensorsStatus.toString());
+            } else {
+                localStorage.setItem('sensorsStatus', sensorsStatus.toString());
+            }
+            
+            // Update all sensors in database
+            try {
+                const response = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS, {
+                    method: 'GET'
+                });
+                const userSensors = response.sensors || [];
+                
+                // Update each sensor's status in the database
+                const newStatus = sensorsStatus ? 'online' : 'offline';
+                for (const sensor of userSensors) {
+                    await apiRequest(`${API_CONFIG.ENDPOINTS.SENSORS}/${sensor.id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to update sensor statuses:', error);
+            }
+            
+            if (sensorsStatus) {
+                btn.className = 'btn-secondary';
+                text.textContent = 'Turn Sensors Off';
+                updateUserSensorStatus(true);
+                loadUserSensorStatus();
+                addUserSystemEvent('Sensors turned ON', 'success');
+            } else {
+                btn.className = 'btn-danger';
+                text.textContent = 'Turn Sensors On';
+                updateUserSensorStatus(false);
+                loadUserSensorStatus();
+                addUserSystemEvent('Sensors turned OFF', 'warning');
+            }
+            
+            // Update sensor chart if available
+            if (typeof window.updateSensorChart === 'function') {
+                window.updateSensorChart(sensorsStatus);
+            }
+            if (typeof loadSensorData === 'function') {
+                loadSensorData();
+            }
+            
+            // Trigger update in sensor calibration page if it's open
+            window.dispatchEvent(new CustomEvent('sensorsUpdated'));
+            window.dispatchEvent(new CustomEvent('sensorStatusChanged'));
+        }
+
+        function updateUserSystemHealth(isOnline) {
+            const healthItems = document.querySelectorAll('.health-status');
+            healthItems.forEach(item => {
+                if (isOnline) {
+                    item.className = 'health-status status-online';
+                    item.textContent = 'Online';
+                } else {
+                    item.className = 'health-status status-offline';
+                    item.textContent = 'Offline';
+                }
+            });
+        }
+
+        function updateUserSensorStatus(isOnline) {
+            const sensorItems = document.querySelectorAll('.sensor-status');
+            sensorItems.forEach(item => {
+                if (isOnline) {
+                    item.className = 'sensor-status status-online';
+                    item.textContent = 'online';
+                } else {
+                    item.className = 'sensor-status status-offline';
+                    item.textContent = 'offline';
+                }
+            });
+        }
+
+        function addUserSystemEvent(message, type) {
+            const systemEvents = JSON.parse(localStorage.getItem('systemEvents') || '[]');
+            const newEvent = {
+                time: 'Just now',
+                message: message,
+                type: type,
+                timestamp: new Date().toISOString()
+            };
+            const currentUser = getCurrentUser();
+            newEvent.username = currentUser ? currentUser.username : 'unknown';
+            systemEvents.unshift(newEvent);
+            // Keep only last 50 events per user
+            const userEvents = systemEvents.filter(e => e.username === (currentUser ? currentUser.username : 'unknown'));
+            if (userEvents.length > 50) {
+                const toRemove = userEvents.slice(50);
+                toRemove.forEach(event => {
+                    const index = systemEvents.findIndex(e => e.timestamp === event.timestamp && e.username === event.username);
+                    if (index !== -1) systemEvents.splice(index, 1);
+                });
+            }
+            localStorage.setItem('systemEvents', JSON.stringify(systemEvents));
+            loadUserSystemEvents();
+        }
+
+        // Initialize button states on page load
+        async function initializeToggleButtons() {
+            // Refresh status from localStorage (check per-operator first)
+            systemStatus = getCurrentSystemStatus();
+            sensorsStatus = getCurrentSensorsStatus();
+            
+            // Check if all sensors are actually on or off to sync button state
+            let userSensors = [];
+            try {
+                const response = await apiRequest(API_CONFIG.ENDPOINTS.SENSORS, {
+                    method: 'GET'
+                });
+                userSensors = response.sensors || [];
+            } catch (error) {
+                console.error('Failed to load sensors:', error);
+            }
+            
+            if (userSensors.length > 0) {
+                // Check if all sensors are on or all are off
+                const allOn = userSensors.every(sensor => sensor.status === 'online');
+                const allOff = userSensors.every(sensor => sensor.status === 'offline');
+                
+                // Update sensorsStatus to match reality if all sensors have same state
+                if (allOff && sensorsStatus) {
+                    // All sensors are off but toggle says on - sync it
+                    sensorsStatus = false;
+                    if (currentUser && currentUser.username) {
+                        localStorage.setItem(`sensorsStatus_${currentUser.username}`, 'false');
+                    } else {
+                        localStorage.setItem('sensorsStatus', 'false');
+                    }
+                } else if (allOn && !sensorsStatus) {
+                    // All sensors are on but toggle says off - sync it
+                    sensorsStatus = true;
+                    if (currentUser && currentUser.username) {
+                        localStorage.setItem(`sensorsStatus_${currentUser.username}`, 'true');
+                    } else {
+                        localStorage.setItem('sensorsStatus', 'true');
+                    }
+                }
+            }
+            
+            const systemBtn = document.getElementById('systemToggle');
+            const systemText = document.getElementById('systemToggleText');
+            const sensorsBtn = document.getElementById('sensorsToggle');
+            const sensorsText = document.getElementById('sensorsToggleText');
+            
+            if (systemBtn && systemText) {
+                if (systemStatus) {
+                    systemBtn.className = 'btn-primary';
+                    systemText.textContent = 'Turn System Off';
+                } else {
+                    systemBtn.className = 'btn-danger';
+                    systemText.textContent = 'Turn System On';
+                }
+            }
+            
+            if (sensorsBtn && sensorsText) {
+                if (sensorsStatus) {
+                    sensorsBtn.className = 'btn-secondary';
+                    sensorsText.textContent = 'Turn Sensors Off';
+                } else {
+                    sensorsBtn.className = 'btn-danger';
+                    sensorsText.textContent = 'Turn Sensors On';
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeToggleButtons();
+            loadUserMonitoringData();
+            setInterval(() => {
+                // Refresh status from localStorage (in case admin changed it)
+                const newSystemStatus = getCurrentSystemStatus();
+                const newSensorsStatus = getCurrentSensorsStatus();
+                
+                // Update local variables if they changed
+                if (newSystemStatus !== systemStatus) {
+                    systemStatus = newSystemStatus;
+                    initializeToggleButtons();
+                    // Update performance chart when system status changes
+                    if (typeof window.updatePerformanceChart === 'function') {
+                        window.updatePerformanceChart(systemStatus);
+                    }
+                }
+                if (newSensorsStatus !== sensorsStatus) {
+                    sensorsStatus = newSensorsStatus;
+                    initializeToggleButtons();
+                    // Update sensor chart when sensor status changes
+                    if (typeof window.updateSensorChart === 'function') {
+                        window.updateSensorChart(sensorsStatus);
+                    }
+                }
+                
+                loadUserMonitoringData();
+            }, 5000);
+            
+            // Listen for sensor updates from other pages
+            window.addEventListener('sensorsUpdated', function() {
+                loadUserMonitoringData();
+                // Also update chart if available
+                if (typeof loadSensorData === 'function') {
+                    loadSensorData();
+                }
+            });
+            
+            // Listen for status changes from sensor page
+            window.addEventListener('sensorStatusChanged', function() {
+                loadUserSensorStatus();
+                if (typeof loadSensorData === 'function') {
+                    loadSensorData();
+                }
+            });
+            
+            // Listen for system events updates
+            window.addEventListener('systemEventsUpdated', function() {
+                loadUserSystemEvents();
+            });
+            
+            // Listen for storage changes from admin (other tabs/windows)
+            window.addEventListener('storage', function(e) {
+                const currentUser = getCurrentUser();
+                const username = currentUser ? currentUser.username : null;
+                
+                // Check if sensors were changed by admin
+                if (e.key === `sensorsStatus_${username}` || e.key === 'userSensors') {
+                    // Update sensors status and button
+                    sensorsStatus = getCurrentSensorsStatus();
+                    initializeToggleButtons();
+                    loadUserMonitoringData();
+                    
+                    if (typeof loadSensorData === 'function') {
+                        loadSensorData();
+                    }
+                    
+                    // Update sensor chart
+                    if (typeof window.updateSensorChart === 'function') {
+                        window.updateSensorChart(sensorsStatus);
+                    }
+                }
+                
+                // Check if system was changed by admin
+                if (e.key === `systemStatus_${username}`) {
+                    systemStatus = getCurrentSystemStatus();
+                    initializeToggleButtons();
+                    loadUserMonitoringData();
+                    
+                    // Update performance chart
+                    if (typeof window.updatePerformanceChart === 'function') {
+                        window.updatePerformanceChart(systemStatus);
+                    }
+                }
+                
+                // Check for system events updates
+                if (e.key === 'systemEvents') {
+                    loadUserSystemEvents();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

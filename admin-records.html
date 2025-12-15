@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pellet Records - Admin</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/charts.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+    <style>
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Charts section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        
+        .chart-header {
+            margin-bottom: 1.25rem;
+        }
+        
+        .chart-header h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.375rem;
+        }
+        
+        .chart-header p {
+            color: var(--text-secondary);
+            margin-top: 0.375rem;
+            margin-bottom: 0;
+            font-size: 0.875rem;
+        }
+        
+        .chart-container {
+            width: 100%;
+            min-height: 320px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="16" cy="10" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="12" cy="14" r="2.5" fill="currentColor" opacity="0.9"/>
+                        <circle cx="6" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.7"/>
+                        <path d="M12 4L14 6L18 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+                        <path d="M4 20C4 20 6 18 8 20C10 22 12 20 14 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <path d="M10 20C10 20 12 18 14 20C16 22 18 20 20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+                    </svg>
+                </div>
+                <h2>OptiFeed</h2>
+            </div>
+            <div class="sidebar-account">
+                <div class="account-avatar" id="accountAvatar">A</div>
+                <div class="account-info">
+                    <div class="account-name" id="accountName">Administrator</div>
+                    <div class="account-username" id="accountUsername">@username</div>
+                </div>
+                <div class="account-role" id="accountRole">Administrator</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-dashboard.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                            <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-records.html" class="active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span>Pellet Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-users.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-monitoring.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Operator Monitoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin-locations.html">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Setup Locations</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <div class="page-header">
+                <div class="header-content">
+                    <div class="header-title-section">
+                        <h1>
+                            <svg class="page-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 2H6C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 2V8H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Pellet Measurement Records
+                        </h1>
+                        <p class="header-subtitle">View and manage all pellet measurement records from operators</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Profiles Section - Enhanced -->
+            <div class="user-profiles-section" style="margin-bottom: 3rem; padding-top: 2rem;">
+                <div class="section-header-enhanced" style="
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 2rem;
+                    padding: 1.75rem 2rem;
+                    background: linear-gradient(135deg, rgba(47, 167, 110, 0.08) 0%, rgba(78, 205, 196, 0.05) 50%, rgba(255, 255, 255, 0) 100%);
+                    border-radius: 1rem;
+                    border: 1px solid rgba(47, 167, 110, 0.12);
+                    margin-bottom: 2rem;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #2FA76E, #4ECDC4);"></div>
+                    <div style="flex: 1; padding-left: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.875rem; margin-bottom: 0.625rem;">
+                            <div style="
+                                width: 48px;
+                                height: 48px;
+                                border-radius: 12px;
+                                background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 4px 12px rgba(47, 167, 110, 0.25);
+                            ">
+                                <svg style="width: 24px; height: 24px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"/>
+                                    <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700; color: #1e293b; letter-spacing: -0.02em;">Operator Supervision</h2>
+                                <p style="margin: 0.25rem 0 0 0; font-size: 0.9375rem; color: #64748b; font-weight: 500;">Monitor and review operator activity and performance</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        padding: 0.625rem 1rem;
+                        background: white;
+                        border-radius: 0.5rem;
+                        border: 1px solid #e2e8f0;
+                        font-size: 0.8125rem;
+                        color: #64748b;
+                        font-weight: 500;
+                    ">
+                        <svg style="width: 16px; height: 16px; color: #2FA76E;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        <span id="operatorCount">Loading...</span>
+                    </div>
+                </div>
+                <div id="userProfilesList" class="user-profiles-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+                    gap: 1.5rem;
+                ">
+                    <!-- User profiles will be populated here -->
+                </div>
+            </div>
+
+
+            <!-- Comprehensive Data Summary Section - Enhanced -->
+            <div class="data-summary-section" style="
+                margin-bottom: 3rem;
+                background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+                border-radius: 1.5rem;
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            ">
+                <!-- Section Header -->
+                <div style="
+                    padding: 2rem 2.5rem;
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="position: absolute; top: 0; right: 0; width: 300px; height: 100%; background: linear-gradient(135deg, rgba(47, 167, 110, 0.15) 0%, transparent 70%);"></div>
+                    <div style="position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: rgba(78, 205, 196, 0.08);"></div>
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="
+                                width: 56px;
+                                height: 56px;
+                                border-radius: 14px;
+                                background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 8px 24px rgba(47, 167, 110, 0.35);
+                            ">
+                                <svg style="width: 28px; height: 28px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 3V21H21" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M18 17V9" stroke-linecap="round"/>
+                                    <path d="M13 17V5" stroke-linecap="round"/>
+                                    <path d="M8 17V14" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.625rem; font-weight: 700; color: white; letter-spacing: -0.02em;">Analytics Overview</h2>
+                                <p style="margin: 0.375rem 0 0 0; font-size: 0.9375rem; color: rgba(255, 255, 255, 0.7); font-weight: 500;">Comprehensive insights across all measurement data</p>
+                            </div>
+                        </div>
+                        <div style="
+                            display: flex;
+                            align-items: center;
+                            gap: 0.75rem;
+                            padding: 0.75rem 1.25rem;
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 0.75rem;
+                            border: 1px solid rgba(255, 255, 255, 0.15);
+                            backdrop-filter: blur(8px);
+                        ">
+                            <svg style="width: 18px; height: 18px; color: #4ECDC4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                            <span style="font-size: 0.875rem; color: white; font-weight: 600;">Real-time Data</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div id="allUsersDataSummary" class="data-summary-grid" style="
+                    padding: 2rem 2.5rem;
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1.25rem;
+                ">
+                    <!-- Data summary will be populated here -->
+                </div>
+                
+                <!-- Charts Section - Session Analytics -->
+                <div style="padding: 0 2.5rem 2.5rem 2.5rem;">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        gap: 0.75rem;
+                        margin-bottom: 1.5rem;
+                        padding-bottom: 1rem;
+                        border-bottom: 2px solid #e2e8f0;
+                    ">
+                        <svg style="width: 22px; height: 22px; color: #2FA76E;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                        </svg>
+                        <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600; color: #1e293b;">Session Analytics</h3>
+                    </div>
+                    
+                    <div class="charts-section" style="
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+                        gap: 1.5rem;
+                        margin-top: 0;
+                    ">
+                        <div class="chart-card" style="
+                            background: white;
+                            border-radius: 1rem;
+                            padding: 1.75rem;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                            animation: fadeInUp 0.5s ease 0.1s both;
+                        ">
+                            <div class="chart-header" style="margin-bottom: 1.25rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 10px;
+                                        background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.06));
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        <svg style="width: 20px; height: 20px; color: #3b82f6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12,6 12,12 16,14"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">Session Duration</h4>
+                                        <p style="margin: 0.125rem 0 0 0; font-size: 0.8125rem; color: #64748b;">Average session length</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="min-height: 320px;">
+                                <div id="sessionDurationChart"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card" style="
+                            background: white;
+                            border-radius: 1rem;
+                            padding: 1.75rem;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                            animation: fadeInUp 0.5s ease 0.2s both;
+                        ">
+                            <div class="chart-header" style="margin-bottom: 1.25rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 10px;
+                                        background: linear-gradient(135deg, rgba(47, 167, 110, 0.12), rgba(47, 167, 110, 0.06));
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        <svg style="width: 20px; height: 20px; color: #2FA76E;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 20V10"/>
+                                            <path d="M18 20V4"/>
+                                            <path d="M6 20V16"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">Session Productivity</h4>
+                                        <p style="margin: 0.125rem 0 0 0; font-size: 0.8125rem; color: #64748b;">Pellets per session</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="min-height: 320px;">
+                                <div id="sessionProductivityChart"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card" style="
+                            background: white;
+                            border-radius: 1rem;
+                            padding: 1.75rem;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                            animation: fadeInUp 0.5s ease 0.3s both;
+                        ">
+                            <div class="chart-header" style="margin-bottom: 1.25rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 10px;
+                                        background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.06));
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        <svg style="width: 20px; height: 20px; color: #8b5cf6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">Session Status</h4>
+                                        <p style="margin: 0.125rem 0 0 0; font-size: 0.8125rem; color: #64748b;">Status breakdown</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="min-height: 320px;">
+                                <div id="sessionStatusChart"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card" style="
+                            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                            border-radius: 1rem;
+                            padding: 1.75rem;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                            animation: fadeInUp 0.5s ease 0.4s both;
+                        ">
+                            <div class="chart-header" style="margin-bottom: 1.25rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="
+                                        width: 40px;
+                                        height: 40px;
+                                        border-radius: 10px;
+                                        background: linear-gradient(135deg, rgba(78, 205, 196, 0.12), rgba(78, 205, 196, 0.06));
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    ">
+                                        <svg style="width: 20px; height: 20px; color: #4ECDC4;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b;">User Activity</h4>
+                                        <p style="margin: 0.125rem 0 0 0; font-size: 0.8125rem; color: #64748b;">Sessions by operator</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-container" style="min-height: 320px;">
+                                <div id="userActivitySummaryChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <form class="modal-form" onsubmit="event.preventDefault(); saveProfile();">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email</label>
+                    <input type="email" id="profileEmail">
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileLocation">Setup Location</label>
+                    <select id="profileLocation">
+                        <option value="">Select a location</option>
+                        <option value="Factory Floor A, Station 1">Factory Floor A, Station 1</option>
+                        <option value="Factory Floor A, Station 2">Factory Floor A, Station 2</option>
+                        <option value="Factory Floor B, Station 1">Factory Floor B, Station 1</option>
+                        <option value="Factory Floor B, Station 2">Factory Floor B, Station 2</option>
+                        <option value="Factory Floor C, Station 1">Factory Floor C, Station 1</option>
+                        <option value="Main Office">Main Office</option>
+                        <option value="Quality Control Lab">Quality Control Lab</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="profileIdNumber">ID Number</label>
+                    <input type="text" id="profileIdNumber" readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-content" style="
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+        ">
+            <div class="modal-header" style="
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                padding: 2rem 2.5rem;
+                border-bottom: none;
+                position: relative;
+                overflow: hidden;
+                flex-shrink: 0;
+            ">
+                <div style="position: absolute; top: 0; right: 0; width: 200px; height: 100%; background: linear-gradient(135deg, rgba(47, 167, 110, 0.15) 0%, transparent 70%);"></div>
+                <div style="position: absolute; bottom: -30px; right: 20px; width: 100px; height: 100px; border-radius: 50%; background: rgba(78, 205, 196, 0.1);"></div>
+                <h2 id="userDetailsTitle" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    margin: 0;
+                    position: relative;
+                    z-index: 1;
+                ">
+                    <div style="
+                        width: 52px;
+                        height: 52px;
+                        border-radius: 14px;
+                        background: linear-gradient(135deg, #2FA76E, #4ECDC4);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 8px 20px rgba(47, 167, 110, 0.35);
+                    ">
+                        <svg style="width: 26px; height: 26px; color: white;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21V19C17 16.791 15.209 15 13 15H5C2.791 15 1 16.791 1 19V21"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21V19C23 17.139 21.807 15.52 20.169 15"/>
+                            <path d="M17 1C18.648 1.629 19.84 3.246 19.84 5.115C19.84 6.984 18.648 8.601 17 9.23"/>
+                        </svg>
+                    </div>
+                    <span style="
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        color: white;
+                        letter-spacing: -0.02em;
+                    ">Operator Activity Summary</span>
+                </h2>
+                <span class="close" onclick="closeUserDetailsModal()" style="
+                    position: relative;
+                    z-index: 1;
+                    color: white;
+                    font-size: 2rem;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px;
+                    background: rgba(255, 255, 255, 0.1);
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&times;</span>
+            </div>
+            <div id="userDetailsContent" style="
+                padding: 2.5rem;
+                background: #f8fafc;
+                flex: 1;
+                overflow-y: auto;
+                min-height: 0;
+            ">
+                <!-- User details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="user.js"></script>
+    <script src="admin-dashboard.js"></script>
+    <script src="admin-records-db.js"></script>
+    <script src="admin-charts-db.js"></script>
+    <script src="profile-edit.js"></script>
+    <script>
+        // Ensure sidebar account info is updated after all scripts load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for all scripts to initialize
+            setTimeout(function() {
+                if (typeof updateSidebarAccount === 'function') {
+                    updateSidebarAccount();
+                }
+                // Also ensure user profiles and data summary are loaded
+                if (typeof loadUserProfiles === 'function') {
+                    loadUserProfiles();
+                }
+                if (typeof loadAllUsersDataSummary === 'function') {
+                    loadAllUsersDataSummary();
+                }
+            }, 200);
+        });
+    </script>
+</body>
+</html>
+

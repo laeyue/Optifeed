@@ -1,0 +1,33 @@
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Env
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Build
+dist/
+build/
+coverage/
+
+# Database
+database/*.db
+database/*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Misc
+*.tgz
+*.zip
+.idea/
