@@ -1,6 +1,7 @@
 // API Configuration
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:3000/api',
+    // Use current origin by default so it works behind reverse proxies / stacks
+    BASE_URL: `${(typeof window !== 'undefined' && window.location ? window.location.origin : 'http://localhost:5173')}/api`,
     ENDPOINTS: {
         LOGIN: '/auth/login',
         SIGNUP: '/auth/signup',
